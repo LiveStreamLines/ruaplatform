@@ -1,0 +1,98 @@
+[
+  {
+    "_id": "a02f4c66b730437fc6578824",
+    "orderNumber": "SO-2506-4806",
+    "customer": "dev123",
+    "customerName": "Test Developer Company",
+    "project": "proj456",
+    "projectName": "Test Project",
+    "lineItems": [
+      {
+        "camera": "Camera-001",
+        "period": 12,
+        "pricePerMonth": 150
+      },
+      {
+        "camera": "Camera-002",
+        "period": 6,
+        "pricePerMonth": 200
+      }
+    ],
+    "paymentTerms": {
+      "initialPercent": 50,
+      "initialTrigger": "installation",
+      "remainderSchedule": "monthly",
+      "months": 12
+    },
+    "contractStartDate": "2024-06-01",
+    "contractDuration": 12,
+    "monthlyFee": 350,
+    "totalContractValue": 4200,
+    "status": "Draft",
+    "notes": "Test sales order from Postman",
+    "paymentSchedule": [
+      {
+        "dueDate": "2024-06-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2024-07-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2024-08-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2024-09-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2024-10-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2024-11-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2024-12-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2025-01-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2025-02-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2025-03-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2025-04-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      },
+      {
+        "dueDate": "2025-05-01T00:00:00.000Z",
+        "amount": 350,
+        "status": "Pending"
+      }
+    ],
+    "createdAt": "2025-06-23T08:34:21.155Z",
+    "updatedAt": "2025-06-23T08:34:21.155Z"
+  }
+]

@@ -1,0 +1,158 @@
+/* AWJ Sidenav - Gold & White Theme */
+
+.sidenav-container {
+  height: 100%;
+  background: linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 100%);
+  border-right: 2px solid rgba(212, 175, 55, 0.2);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* AWJ Logo Header */
+.sidenav-header {
+  padding: 20px 16px;
+  text-align: center;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%);
+  margin-bottom: 10px;
+}
+
+.awj-full-logo {
+  height: 35px;
+  width: auto;
+  margin-bottom: 8px;
+  filter: brightness(0) invert(1);
+}
+
+.sidenav-header h3 {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Navigation */
+.main-nav {
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.nav-item {
+  height: 48px !important;
+  margin: 4px 4px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: #ffffff !important;
+  font-weight: 500;
+  width: calc(100% - 8px);
+  box-sizing: border-box;
+}
+
+.nav-item:hover {
+  background: rgba(212, 175, 55, 0.1) !important;
+  color: #9e8d60 !important;
+  transform: translateX(4px);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%) !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.nav-item mat-icon {
+  margin-right: 12px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff !important;
+}
+
+.nav-item span {
+  font-size: 0.95rem;
+  font-weight: inherit;
+  color: #ffffff !important;
+}
+
+/* Active state styling */
+.nav-item.active mat-icon {
+  color: white;
+}
+
+.nav-item:hover mat-icon {
+  color: #9e8d60;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidenav-header {
+    padding: 15px 12px;
+  }
+  
+  .awj-logo {
+    height: 35px;
+  }
+  
+  .sidenav-header h3 {
+    font-size: 1rem;
+  }
+  
+  .nav-item {
+    height: 44px !important;
+    margin: 3px 4px;
+    width: calc(100% - 8px);
+    box-sizing: border-box;
+  }
+  
+  .nav-item mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .nav-item span {
+    font-size: 0.9rem;
+  }
+}
+
+/* Smooth animations */
+.nav-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-item:hover::before {
+  left: 100%;
+}
+
+/* Focus states for accessibility */
+.nav-item:focus {
+  outline: 2px solid #9e8d60;
+  outline-offset: 2px;
+}
+
+/* Remove default Material Design list styling */
+mat-nav-list {
+  background: transparent;
+}
+
+mat-nav-list a {
+  background: transparent;
+}

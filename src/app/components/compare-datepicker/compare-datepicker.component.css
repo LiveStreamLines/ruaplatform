@@ -1,0 +1,163 @@
+
+/* Main container to prevent vertical scroll */
+.compare-datepicker-container {
+  overflow-y: hidden;
+  max-height: 200px;
+}
+
+.thumbnail-strip::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .thumbnail-strip::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #9e8d60, #beb395);  /* Theme gold gradient */
+    border-radius: 10px;
+  }
+  
+  .thumbnail-strip::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+  }
+  
+  .thumbnail-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: 120px;
+  }
+  
+  .thumbnail {
+    position: relative;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  
+  .thumbnail.selected {
+    border-color: #9e8d60; /* Theme gold highlight for selected thumbnail */
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+    transform: scale(1.05);
+  }
+  
+  /* Smaller size for thumbnails */
+  .thumbnail-img {
+    width: 90px; /* Reduced width */
+    height: 90px; /* Reduced height */
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  
+  /* Date overlay */
+  .thumbnail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 4px 0px;
+    background: linear-gradient(135deg, #9e8d60, #beb395); /* Theme gold gradient */
+    color: #ffffff; /* White text for better contrast */
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  }
+  
+  /* Date selector styling */
+  .date-selector {
+    margin-bottom: 10px;
+  }
+  
+  
+  .spinner-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Style for the container */
+  .form-field {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+    gap: 8px; /* Spacing between label and input */
+    margin-bottom: 16px;
+  }
+  
+  /* Style for the label */
+  .form-field label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2c2c2c; /* Theme consistent text color */
+  }
+  
+  /* Style for the date input */
+  .native-date-picker {
+    width: 30%;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #2c2c2c; /* Theme consistent text color */
+    transition: all 0.3s ease; /* Smooth transitions for hover/focus */
+    backdrop-filter: blur(5px);
+  }
+  
+  /* Input hover effect */
+  .native-date-picker:hover {
+    border-color: #9e8d60; /* Theme gold border on hover */
+    background-color: rgba(255, 255, 255, 1);
+  }
+  
+  /* Input focus effect */
+  .native-date-picker:focus {
+    border-color: #beb395; /* Theme gold border for focus */
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); /* Theme gold glow effect */
+    outline: none; /* Remove default outline */
+    background-color: rgba(255, 255, 255, 1);
+  }
+  
+  /* Style for invalid input (optional, if validation is needed) */
+  .native-date-picker:invalid {
+    border-color: #ff4d4d; /* Red border for invalid input */
+    background-color: #ffe6e6; /* Light red background */
+  }
+  
+  /* Style for disabled input (optional) */
+  .native-date-picker:disabled {
+    background-color: #e9ecef; /* Gray background */
+    color: #6c757d; /* Light gray text */
+    border-color: #ddd; /* Light gray border */
+    cursor: not-allowed;
+  }
+  
+  /* Style the custom calendar icon */
+  .calendar-icon {
+    position: absolute;
+    top: 38px;
+    left: 27%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #2c2c2c;
+    font-size: 19px;
+    background: linear-gradient(135deg, #9e8d60, #beb395);
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+  }
+  
+  .material-icons {
+    font-size: 14px;
+      padding: 4px;
+  }
+  

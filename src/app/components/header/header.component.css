@@ -1,0 +1,212 @@
+/* AWJ Header - Gold & White Theme */
+
+.awj-header {
+  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* Menu Button */
+.menu-button {
+  color: white !important;
+  margin-right: 16px;
+}
+
+.menu-button:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* AWJ Brand Section */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 24px;
+}
+
+.header-logo {
+  height: 32px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
+
+.username {
+  color: white;
+  font-weight: 500;
+}
+
+.user-icon {
+  color: white;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.logout-button {
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.logout-button mat-icon {
+  margin-right: 6px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  max-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.breadcrumbs a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.breadcrumbs span {
+  font-weight: 500;
+  color: white;
+  max-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.breadcrumbs .separator {
+  margin: 0 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .breadcrumbs {
+    display: none;
+  }
+  
+  .header-brand {
+    margin-right: 16px;
+  }
+  
+  .header-logo {
+    height: 28px;
+  }
+  
+  .header-title {
+    font-size: 1.1rem;
+  }
+  
+  .user-info {
+    gap: 8px;
+  }
+  
+  .username {
+    display: none;
+  }
+  
+  .logout-button {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-brand {
+    margin-right: 12px;
+  }
+  
+  .header-logo {
+    height: 24px;
+  }
+  
+  .header-title {
+    font-size: 1rem;
+  }
+  
+  .user-info {
+    gap: 6px;
+  }
+  
+  .logout-button {
+    padding: 4px 6px;
+    font-size: 0.75rem;
+  }
+  
+  .logout-button span {
+    display: none;
+  }
+}
+
+/* Toolbar base styles */
+mat-toolbar {
+  width: 100%;
+  z-index: 1000;
+  min-height: 56px;
+  padding: 0 16px;
+}
+
+/* Focus states for accessibility */
+.menu-button:focus,
+.logout-button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+.header-brand,
+.user-info,
+.breadcrumbs {
+  transition: all 0.3s ease;
+}

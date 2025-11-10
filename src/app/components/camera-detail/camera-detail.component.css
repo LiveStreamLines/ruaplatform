@@ -1,0 +1,437 @@
+/* Back button styling */
+
+.back-button {
+  background: linear-gradient(135deg, #9e8d60, #beb395);
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #beb395, #9e8d60);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Toolbar styling */
+.camera-detail-toolbar {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 215, 0, 0.1));
+  backdrop-filter: blur(10px);
+  color: #2c2c2c;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.camera-detail-toolbar button {
+  transition: all 0.3s ease;
+  color: #2c2c2c;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.camera-detail-toolbar button.active {
+  background: linear-gradient(135deg, #9e8d60, #beb395);
+  color: #2c2c2c;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.camera-detail-toolbar button:hover {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+  transform: translateY(-1px);
+}
+
+/* .compare-toolbar {
+  background-color: #e0e0e0;
+} */
+
+
+
+.red-outline .mat-mdc-form-field-flex {
+  height: 3.1rem;
+}
+
+
+/* Spinner for loading state */
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: #2c2c2c;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 215, 0, 0.1));
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+.date-time-toggle {
+  margin-bottom: 15px;
+  text-align: left;
+  font-size: 14px;
+  color: #2c2c2c;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 215, 0, 0.05));
+  padding: 12px;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.single {
+  position: relative;
+}
+.date-time-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 215, 0, 0.1));
+  backdrop-filter: blur(10px);
+  color: #2c2c2c;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.weather-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 215, 0, 0.1));
+  backdrop-filter: blur(10px);
+  color: #2c2c2c;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.content {
+  transform-origin: center;
+}
+
+.large-picture {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+mat-icon {
+  margin-right: 8px;
+}
+
+/* Date picker section styling */
+.date-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.mat-form-field {
+  width: 250px;
+}
+
+/* Thumbnail strip container */
+.thumbnail-strip {
+  display: flex;
+  justify-content: flex-start;  /* Align thumbnails to the left */
+  gap: 10px;
+  overflow-x: auto;
+  white-space: nowrap;  /* Ensure the thumbnails are in a single row */
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.thumbnail-strip::-webkit-scrollbar {
+  height: 8px;
+}
+
+.thumbnail-strip::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #9e8d60, #beb395);  /* Gold gradient scrollbar */
+  border-radius: 10px;
+}
+
+.thumbnail-strip::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+/* Style the share button for proper alignment */
+.share-button {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  gap: 6px; /* Space between the icon and the text */
+  padding: 8px 16px; /* Add padding for better click area */
+  font-size: 14px; /* Ensure consistent font size */
+  text-transform: none; /* Prevent Material's default uppercase */
+  background: linear-gradient(135deg, #9e8d60, #beb395);
+  color: #2c2c2c;
+  margin-right: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.share-button:hover {
+  background: linear-gradient(135deg, #beb395, #9e8d60);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Optional: style the icon */
+.share-icon {
+  font-size: 18px; /* Adjust icon size */
+  vertical-align: middle; /* Ensure proper alignment with the text */
+}
+
+/* Optional: style the text */
+.share-text {
+  line-height: 1; /* Prevent text from being pushed down */
+}
+
+/* Larger thumbnail styling */
+.thumbnail {
+  position: relative;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+  flex: 0 0 auto;  /* Prevent shrinking or growing */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.thumbnail.selected {
+  border-color: #9e8d60;  /* Gold highlight for selected thumbnail */
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+  transform: scale(1.05);
+}
+
+/* Larger Thumbnail image styling */
+.thumbnail-img {
+  width: 120px;  /* Increased width */
+  height: 120px; /* Increased height */
+  object-fit: cover;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.thumbnail-img:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+  filter: brightness(1.1);
+}
+
+/* Adjusted Thumbnail date overlay */
+.thumbnail-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 4px;  /* Better padding for readability */
+  background: linear-gradient(135deg, #9e8d60, #beb395); /* Theme gold gradient background */
+  color: #ffffff; /* White text for better contrast with theme colors */
+  font-size: 11px;  /* Slightly larger font size */
+  font-weight: 600;
+  text-align: center;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3); /* Add theme-consistent shadow */
+}
+
+/* Centered text for camera and project */
+h2, p {
+  color: #2c2c2c;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+p {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+/* Style for the container */
+.form-field {
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Stack label and input vertically */
+  gap: 8px; /* Spacing between label and input */
+  margin-bottom: 16px;
+}
+
+/* Style for the label */
+.form-field label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #2c2c2c; /* Dark text for better contrast */
+}
+
+/* Style for the date input */
+.native-date-picker {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.9); /* Clean white background */
+  color: #2c2c2c; /* Dark text color */
+  transition: all 0.3s ease; /* Smooth transitions for hover/focus */
+  backdrop-filter: blur(5px);
+}
+
+/* Input hover effect */
+.native-date-picker:hover {
+  border-color: #9e8d60; /* Gold border on hover */
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* Input focus effect */
+.native-date-picker:focus {
+  border-color: #beb395; /* Orange border for focus */
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4); /* Gold glow effect */
+  outline: none; /* Remove default outline */
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* Style for invalid input (optional, if validation is needed) */
+.native-date-picker:invalid {
+  border-color: #ff4d4d; /* Red border for invalid input */
+  background-color: #ffe6e6; /* Light red background */
+}
+
+/* Style for disabled input (optional) */
+.native-date-picker:disabled {
+  background-color: #e9ecef; /* Gray background */
+  color: #6c757d; /* Light gray text */
+  border-color: #ddd; /* Light gray border */
+  cursor: not-allowed;
+}
+
+/* Style the custom calendar icon */
+.calendar-icon {
+  position: absolute;
+    top: 37px;
+    right: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #2c2c2c;
+    font-size: 19px;
+    background: linear-gradient(135deg, #9e8d60, #beb395);
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+}
+
+.material-icons {
+  font-size: 14px;
+  padding: 4px;
+}
+
+/* Toolbar adjustments */
+.camera-detail-toolbar {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: space-around;
+  gap: 10px;
+  background-color: #54090959;
+  color: white;
+  padding: 10px;
+}
+/* 
+/* Hide specific buttons on smaller screens */
+@media (max-width: 768px) {
+  .camera-detail-toolbar button:nth-child(2),
+  .camera-detail-toolbar button:nth-child(3),
+  .camera-detail-toolbar button:nth-child(4) {
+    display: none; /* Hide Studio, Zoom, and Compare */
+  }
+} 
+/* Make buttons more compact */
+.camera-detail-toolbar button {
+  font-size: 12px; /* Smaller font size */
+  padding: 6px 12px; /* Reduce padding */
+}
+
+/* Adjust thumbnail strip */
+.thumbnail-strip {
+  gap: 8px; /* Smaller gap between thumbnails */
+  padding: 8px;
+}
+
+.thumbnail-img {
+  width: 100px; /* Reduce thumbnail size */
+  height: 100px;
+}
+
+/* Adjust share button */
+.share-button {
+  font-size: 12px; /* Smaller font size */
+  padding: 4px 8px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .single img,
+  .large-picture {
+    max-width: 100%; /* Ensure images fit within the screen */
+    height: auto;
+  }
+
+  .thumbnail-strip {
+    overflow-x: auto; /* Enable horizontal scrolling for thumbnails */
+  }
+
+  .thumbnail-img {
+    width: 80px; /* Further reduce thumbnail size */
+    height: 80px;
+  }
+
+  .date-time-toggle label {
+    font-size: 12px; /* Adjust toggle text size */
+  }
+}
+
+/* For extra small screens */
+@media (max-width: 480px) {
+  .camera-detail-toolbar {
+    flex-direction: column; /* Stack toolbar buttons */
+  }
+
+  .camera-detail-toolbar button {
+    width: 100%; /* Full-width buttons */
+    text-align: center; /* Center align text */
+  }
+
+  .thumbnail-img {
+    width: 60px; /* Smaller thumbnails */
+    height: 60px;
+  }
+
+  .date-time-toggle {
+    font-size: 10px; /* Reduce toggle text size further */
+  }
+}
+
+

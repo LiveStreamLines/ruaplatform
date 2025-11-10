@@ -1,0 +1,36 @@
+<mat-toolbar class="awj-header">
+  <!-- Toggle Button -->
+  <button mat-icon-button (click)="toggleSidenav()" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- AWJ Logo and Title -->
+  <div class="header-brand">
+    <img src="assets/awjlogo.png" alt="AWJ Logo" class="header-logo" />
+    <span class="header-title">AHC Timelapse</span>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <ng-container *ngFor="let crumb of breadcrumbs; let isLast = last">
+      <!-- Link for breadcrumbs with URLs -->
+      <a *ngIf="crumb.url && !isLast" [routerLink]="crumb.url">{{ crumb.label }}</a>
+      <!-- Plain text for the current (last) breadcrumb -->
+      <span *ngIf="!crumb.url || isLast">{{ crumb.label }}</span>
+      <!-- Separator -->
+      <span *ngIf="!isLast" class="separator"> / </span>
+    </ng-container>
+  </div>
+ 
+  <span class="spacer"></span>
+
+  <!-- User Info -->
+  <div class="user-info">
+    <span class="username">{{ username }}</span>
+    <mat-icon class="user-icon">account_circle</mat-icon>
+    <button mat-button (click)="logout()" class="logout-button">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </div>
+</mat-toolbar>

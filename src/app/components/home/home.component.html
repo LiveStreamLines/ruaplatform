@@ -1,0 +1,49 @@
+<!-- AHC Timelapse Home Page -->
+<div class="home-layout">
+  <!-- Welcome Header Section -->
+  <div class="welcome-section">
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <h1>Welcome to AHC Timelapse</h1>
+        <p>Your comprehensive timelapse monitoring platform</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading developers...</p>
+    </div>
+    
+    <!-- Developers Grid -->
+    <div *ngIf="!loading && filteredDevelopers.length > 0" class="developers-container">
+      <mat-card class="developer-card" *ngFor="let developer of filteredDevelopers" (click)="onDeveloperClick(developer)">
+        <div class="card-header">
+          <mat-card-title>{{ developer.developerName }}</mat-card-title>
+        </div>
+        <div class="card-image-container">
+          <img mat-card-image [src]="developer.logo" alt="{{ developer.developerName }}" class="developer-logo" />
+        </div>
+        <mat-card-content class="card-description">
+          <p>{{ developer.description }}</p>
+        </mat-card-content>
+        <mat-card-actions class="card-actions">
+          <button mat-raised-button class="view-projects-btn">
+            <mat-icon>visibility</mat-icon>
+            View Projects
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    
+    <!-- No Results State -->
+    <div *ngIf="!loading && filteredDevelopers.length === 0" class="no-results">
+      <mat-icon class="no-results-icon">search_off</mat-icon>
+      <h3>No developers found</h3>
+      <p>Try adjusting your search terms or check back later.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,213 @@
+/* Services Component - White & Gold Theme */
+
+.tile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Vertical spacing between tiles */
+  padding: 20px;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+  min-height: 100vh;
+}
+
+.tile {
+  display: flex;
+  margin-right: 130px;
+  align-items: center;
+  border-radius: 16px;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(212, 175, 55, 0.1);
+  transition: all 0.3s ease;
+  position: relative; /* For positioning the overflowing image */
+  overflow: visible; /* Allows the image to overflow the tile */
+  width: 50%;
+}
+
+.tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #9e8d60 0%, #beb395 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.tile:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.tile-content {
+  flex: 1; /* Content occupies the majority of the space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 20px 20px 0;
+}
+
+.tile-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  color: #333;
+  line-height: 1.3;
+}
+
+.tile-button {
+  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  border-radius: 25px !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: all 0.3s ease !important;
+  align-self: flex-start;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3) !important;
+  text-transform: none !important;
+  letter-spacing: 0.5px !important;
+}
+
+.tile-button:hover {
+  background: linear-gradient(135deg, #706444 0%, #9e8d60 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+}
+
+.tile-image {
+  flex: 0 0 30%; /* Image occupies 30% of the tile width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Needed for the overflowing effect */
+}
+
+.tile-image img {
+  width: 250px;
+  max-width: 180%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  position: absolute;
+  right: -10%; /* Overflow to the right of the tile */
+  top: 50%; /* Center the image vertically */
+  transform: translateY(-50%); /* Align image properly */
+  transition: all 0.3s ease;
+}
+
+.tile:hover .tile-image img {
+  transform: translateY(-50%) scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .tile {
+    flex-direction: column; /* Stack the content vertically on small screens */
+    align-items: flex-start;
+    padding-bottom: 40px;
+    width: 90%;
+    margin-right: 0;
+  }
+
+  .tile-image {
+    width: 100%; /* Make the image full width */
+    position: static; /* Default position for smaller screens */
+    margin-top: 15px;
+  }
+
+  .tile-image img {
+    width: 100%; /* Ensure the image fits within the screen width */
+    position: static; /* No overflow effect for smaller screens */
+    transform: none;
+  }
+
+  .tile-button {
+    align-self: stretch; /* Stretch the button to fit full width on small screens */
+  }
+}
+
+  
+.back-button {
+  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%);
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #706444 0%, #9e8d60 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Tablet Screens */
+@media (max-width: 768px) {
+  .tile-container {
+    flex-direction: column; /* Stack tiles vertically */
+    align-items: stretch; /* Stretch tiles to fit the container */
+  }
+
+  .tile {
+    flex-direction: column; /* Stack content vertically within each tile */
+    align-items: flex-start;
+    width: 90%;
+    max-height: 300px;
+    padding: 15px;
+    margin-right: 0;
+  }
+
+  .tile-image {
+    width: 100%; /* Full width */
+    margin-bottom: 10px; /* Add spacing below the image */
+  }
+
+  .tile-image img {
+    width: 70%; /* Fit the container */
+    transform: none; /* No overflow effect */
+    position: static;
+  }
+
+  .tile-button {
+    width: 100%; /* Full width button for easier tapping */
+  }
+}
+
+
+/* Mobile Screens */
+@media (max-width: 480px) {
+  .tile {
+    padding: 15px;
+    width: 95%;
+    margin-right: 0;
+  }
+
+  .tile-title {
+    font-size: 1.2rem; /* Smaller font size */
+    line-height: 1.3;
+    margin-bottom: 30px;
+  }
+
+  .tile-button {
+    padding: 10px 20px; /* Adjust button padding */
+    font-size: 0.8rem; /* Smaller font size */
+  }
+
+  .back-button {
+    font-size: 0.8rem; /* Adjust font size */
+    padding: 10px 20px;
+  }
+}
+

@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "test",
+    "phone": "+1234567890",
+    "role": "Super Admin",
+    "isActive": true,
+    "phoneRequired": false,
+    "status": "active",
+    "accessibleDevelopers": [],
+    "accessibleProjects": [],
+    "accessibleCameras": [],
+    "accessibleServices": [],
+    "canAddUser": true,
+    "canGenerateVideoAndPics": true,
+    "createdDate": "2024-01-01T00:00:00.000Z",
+    "LastLoginTime": null
+  },
+  {
+    "_id": "507f1f77bcf86cd799439012",
+    "name": "Admin User",
+    "email": "admin@awjholding.com",
+    "password": "admin123",
+    "phone": "+1234567891",
+    "role": "admin",
+    "isActive": true,
+    "phoneRequired": false,
+    "status": "active",
+    "accessibleDevelopers": [],
+    "accessibleProjects": [],
+    "accessibleCameras": [],
+    "accessibleServices": [],
+    "canAddUser": true,
+    "canGenerateVideoAndPics": true,
+    "createdDate": "2024-01-01T00:00:00.000Z",
+    "LastLoginTime": null
+  }
+]

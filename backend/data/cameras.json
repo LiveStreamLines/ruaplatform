@@ -1,0 +1,62 @@
+[
+  {
+    "_id": "b6247f97816ca9e004c6d0e9",
+    "developer": "0f35c77efdf89a876cf1d329",
+    "project": "5838e2b9841ad6586043cc29",
+    "camera": "camera1",
+    "cameraDescription": "Camera 1",
+    "cindex": 0,
+    "serverFolder": "1116",
+    "lat": "0",
+    "lng": "0",
+    "isActive": true,
+    "country": "Saudi Arabia",
+    "server": "Lsl Standard Cloud",
+    "createdDate": "2025-06-03T13:24:09.660Z"
+  },
+  {
+    "_id": "a32e354c7e18f1ab1c52ff1e",
+    "developer": "0f35c77efdf89a876cf1d329",
+    "project": "5838e2b9841ad6586043cc29",
+    "camera": "camera2",
+    "cameraDescription": "Camera 2",
+    "cindex": 1,
+    "serverFolder": "1117",
+    "lat": "0",
+    "lng": "0",
+    "isActive": true,
+    "country": "Saudi Arabia",
+    "server": "Lsl Standard Cloud",
+    "createdDate": "2025-06-03T13:24:38.806Z"
+  },
+ {
+    "_id": "fc2279123238b2002ebd6f3e",
+    "developer": "0f35c77efdf89a876cf1d329",
+    "project": "6029714901d85e90926c99e0",
+    "camera": "camera1",
+    "cameraDescription": "Camera 1",
+    "cindex": 0,
+    "serverFolder": "1123",
+    "lat": "0",
+    "lng": "0",
+    "isActive": true,
+    "country": "Saudi Arabia",
+    "server": "Lsl Standard Cloud",
+    "createdDate": "2025-07-07T08:34:15.026Z"
+  },
+  {
+    "_id": "ab9d8d7548298469eda768fa",
+    "developer": "0f35c77efdf89a876cf1d329",
+    "project": "6029714901d85e90926c99e0",
+    "camera": "camera2",
+    "cameraDescription": "Camera 2",
+    "cindex": 0,
+    "serverFolder": "1124",
+    "lat": "0",
+    "lng": "0",
+    "isActive": true,
+    "country": "Saudi Arabia",
+    "server": "Lsl Standard Cloud",
+    "createdDate": "2025-07-07T08:34:48.404Z"
+  }
+]
