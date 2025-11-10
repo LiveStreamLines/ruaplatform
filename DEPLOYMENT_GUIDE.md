@@ -1,4 +1,4 @@
-# Deployment Guide for AHC Watch Platform
+# Deployment Guide for Ruaalmadina Platform
 
 ## Files Ready for Deployment
 
