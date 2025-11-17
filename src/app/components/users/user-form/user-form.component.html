@@ -113,28 +113,6 @@
       </div>
     </fieldset>
 
-        
-    <!-- Memory Role (shown only for admin) -->
-    <mat-form-field appearance="outline" *ngIf="showAdminRoles()">
-      <mat-label>Memory Role</mat-label>
-      <mat-select formControlName="memoryRole">
-        <mat-option *ngFor="let role of memoryRoles" [value]="role.value">
-          {{ role.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Inventory Role (shown only for admin) -->
-    <mat-form-field appearance="outline" *ngIf="showAdminRoles()">
-      <mat-label>Inventory Role</mat-label>
-      <mat-select formControlName="inventoryRole">
-        <mat-option *ngFor="let role of inventoryRoles" [value]="role.value">
-          {{ role.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-
     <div class="submit-button" style="width: 100%; display: flex;">
     <button type="submit">Submit</button>
     </div>

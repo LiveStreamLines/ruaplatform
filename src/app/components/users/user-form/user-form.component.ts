@@ -39,7 +39,7 @@ export class UserFormComponent implements OnInit {
   accessibleCamera: string[]=[];
   isSuperAdmin: boolean = false;
 
-  roles: string[] = ['Super Admin', 'Admin', 'User'];
+  roles: string[] = ['Super Admin', 'User'];
   developers: any[] = []; // Replace with actual developer data
   projects: any[] = []; // Replace with actual project data
   cameras: any[] = []; // Replace with actual camera data
@@ -50,19 +50,6 @@ export class UserFormComponent implements OnInit {
     'Site Photography & Videography',
     '360 Photography & Videography',
     'Satellite Imagery'
-  ];
-  memoryRoles = [
-    { value: '', viewValue: '-'},
-    { value: 'viewer', viewValue: 'Memory Viewer' },
-    { value: 'removal', viewValue: 'Memory Removal' },
-    { value: 'archiver', viewValue: "Memory Archiver"},
-  ];
-  
-  inventoryRoles = [
-    { value: '', viewValue: '-' }, 
-    { value: 'viewer', viewValue: 'Inventory viewer' },
-    { value: 'tech', viewValue: 'Inventory Technician' },
-    { value: 'stock', viewValue: 'Inventory Stockeeper' }
   ];
 
   constructor(
@@ -109,17 +96,9 @@ export class UserFormComponent implements OnInit {
         this.hidepermissions = true;
         this.clearAccessibles();
         this.clearPermissions();
-        this.userForm.get('memoryRole')?.disable();
-        this.userForm.get('inventoryRole')?.disable();
-      } else if (role === 'Admin') {
-        console.log('role is admin');
-        this.userForm.get('memoryRole')?.enable();
-        this.userForm.get('inventoryRole')?.enable();
-        this.hidepermissions = false;
       } else {
+        // User role
         this.hidepermissions = false;
-        this.userForm.get('memoryRole')?.disable();
-        this.userForm.get('inventoryRole')?.disable();
       }
     });   
   }
@@ -136,9 +115,7 @@ export class UserFormComponent implements OnInit {
         accessibleCameras: [[]],
         accessibleServices: [['all']], // Default to "All" services
         canAddUser: [false],        // Permission to add user - default to false
-        canGenerateVideoAndPics: [true],    // Permission to upload video
-        memoryRole: [''],
-        inventoryRole: ['']
+        canGenerateVideoAndPics: [true]    // Permission to upload video
       }
     );
     if (this.isEditing) {
@@ -146,10 +123,6 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-  // Add this method to show/hide additional roles
-  showAdminRoles(): boolean {
-    return this.userForm.get('role')?.value === 'Admin';
-  }
 
   loadDevelopers(): void {
     this.developerService.getAllDevelopers().subscribe({
