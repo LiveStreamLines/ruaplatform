@@ -3,7 +3,7 @@
 .sidenav-container {
   height: 100%;
   background: linear-gradient(180deg, #2c2c2c 0%, #1a1a1a 100%);
-  border-right: 2px solid rgba(212, 175, 55, 0.2);
+  border-right: 2px solid rgba(189, 155, 96, 0.2);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -12,12 +12,12 @@
 .sidenav-header {
   padding: 20px 16px;
   text-align: center;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%);
+  border-bottom: 1px solid rgba(189, 155, 96, 0.2);
+  background: linear-gradient(135deg, #bd9b60 0%, #d7cba3 100%);
   margin-bottom: 10px;
 }
 
-.awj-full-logo {
+.rua-logo {
   height: 35px;
   width: auto;
   margin-bottom: 8px;
@@ -51,8 +51,8 @@
 }
 
 .nav-item:hover {
-  background: rgba(212, 175, 55, 0.1) !important;
-  color: #9e8d60 !important;
+  background: rgba(189, 155, 96, 0.1) !important;
+  color: #bd9b60 !important;
   transform: translateX(4px);
 }
 
@@ -60,7 +60,7 @@
   background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%) !important;
   color: white !important;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 2px 8px rgba(189, 155, 96, 0.3);
 }
 
 .nav-item mat-icon {
@@ -95,7 +95,7 @@
     padding: 15px 12px;
   }
   
-  .awj-logo {
+  .rua-logo {
     height: 35px;
   }
   
@@ -144,7 +144,7 @@
 
 /* Focus states for accessibility */
 .nav-item:focus {
-  outline: 2px solid #9e8d60;
+  outline: 2px solid #bd9b60;
   outline-offset: 2px;
 }
 

@@ -1,34 +1,23 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
-import { MsalService } from '@azure/msal-angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router, private msalService: MsalService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    // Wait for MSAL to initialize
-    if (!this.msalService.instance) {
-      this.router.navigate(['/login']);
-      return false;
-    }
-
-    // Check Microsoft authentication
-    const msalAccount = this.msalService.instance.getActiveAccount();
-    const isMsalLoggedIn = !!msalAccount;
-    
-    // Check legacy authentication (for temporary login)
-    const isLegacyLoggedIn = this.authService.isLoggedIn();
+    // Check authentication
+    const isLoggedIn = this.authService.isLoggedIn();
     
     // If trying to access login page, allow it
     if (state.url === '/login') {
       return true;
     }
     
-    if (!isMsalLoggedIn && !isLegacyLoggedIn) {
+    if (!isLoggedIn) {
       this.router.navigate(['/login']);
       return false;
     }

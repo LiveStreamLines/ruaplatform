@@ -4,8 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { MsalService } from '@azure/msal-angular';
-import { AuthenticationResult } from '@azure/msal-browser';
 
 // Define a consistent interface for the backend login response
 interface AuthResponse {
@@ -67,7 +65,7 @@ export class AuthService {
   private accessibleCameras: string[] = [];
   private accessibleServices: string[] = [];
 
-  constructor(private http: HttpClient, private router: Router, private msalService: MsalService) {
+  constructor(private http: HttpClient, private router: Router) {
     // Initialize from localStorage
     this.authToken = localStorage.getItem('authToken');
     this.userId = localStorage.getItem('userId');
@@ -86,9 +84,6 @@ export class AuthService {
     this.accessibleCameras = JSON.parse(localStorage.getItem('accessibleCameras') || '[]');
     this.accessibleServices = JSON.parse(localStorage.getItem('accessibleServices') || '[]');
 
-    // Initialize Microsoft authentication state
-    this.initializeMicrosoftAuth();
-
     // Notify subscribers
     this.userRoleSubject.next(this.userRole);
     this.canAddUserSubject.next(this.canAddUser === 'true');
@@ -96,62 +91,6 @@ export class AuthService {
     this.memoryRoleSubject.next(this.memoryRole);
   }
 
-  // Initialize Microsoft authentication state
-  private initializeMicrosoftAuth(): void {
-    const account = this.msalService.instance.getActiveAccount();
-    if (account) {
-      this.msalService.instance.setActiveAccount(account);
-    } else {
-      // Check if there are any accounts available
-      const accounts = this.msalService.instance.getAllAccounts();
-      if (accounts.length > 0) {
-        this.msalService.instance.setActiveAccount(accounts[0]);
-        this.setMicrosoftUserDataFromAccount(accounts[0]);
-      }
-    }
-  }
-
-  // Microsoft Login
-  loginWithMicrosoft(): void {
-    this.msalService.loginRedirect({
-      scopes: ['user.read']
-    });
-  }
-
-
-  // Handle Microsoft login redirect
-  handleMicrosoftLogin(): Observable<boolean> {
-    return new Observable(observer => {
-      this.msalService.handleRedirectObservable().subscribe({
-        next: (result: AuthenticationResult | null) => {
-          if (result) {
-            this.setMicrosoftUserData(result);
-            observer.next(true);
-            observer.complete();
-          } else {
-            // Check if user is already logged in
-            const accounts = this.msalService.instance.getAllAccounts();
-            
-            if (accounts.length > 0) {
-              // Set the first account as active
-              const account = accounts[0];
-              this.msalService.instance.setActiveAccount(account);
-              this.setMicrosoftUserDataFromAccount(account);
-              observer.next(true);
-              observer.complete();
-            } else {
-              observer.next(false);
-              observer.complete();
-            }
-          }
-        },
-        error: (error: any) => {
-          console.error('Microsoft login error:', error);
-          observer.error(error);
-        }
-      });
-    });
-  }
 
   // Temporary login method for testing (bypasses Microsoft)
   tempLogin(email: string, password: string): Observable<any> {
@@ -164,103 +103,9 @@ export class AuthService {
     );
   }
 
-  // Legacy methods removed - only Microsoft login is supported
 
-  // Set Microsoft user data
-  private setMicrosoftUserData(result: AuthenticationResult): void {
-    const account = this.msalService.instance.getActiveAccount();
-    
-    if (account) {
-      // Set the account as active
-      this.msalService.instance.setActiveAccount(account);
-      
-      this.userId = account.localAccountId;
-      this.username = account.name || '';
-      this.useremail = account.username;
-      this.authToken = result.accessToken;
-      this.userRole = 'Super Admin'; // Default role for Microsoft users
-      this.canAddUser = 'true';
-      this.canGenerateVideoAndPics = 'true';
-      this.manual = 'false';
-      this.memoryRole = 'Super Admin';
-      this.inventoryRole = 'Super Admin';
-      this.accessibleDevelopers = ['all']; // Microsoft users have access to all developers
-      this.accessibleProjects = ['all'];
-      this.accessibleCameras = ['all'];
-      this.accessibleServices = ['all'];
-
-      // Save to localStorage
-      localStorage.setItem('userId', this.userId || '');
-      localStorage.setItem('username', this.username || '');
-      localStorage.setItem('useremail', this.useremail || '');
-      localStorage.setItem('authToken', this.authToken || '');
-      localStorage.setItem('userRole', this.userRole);
-      localStorage.setItem('accessibleDevelopers', JSON.stringify(this.accessibleDevelopers));
-      localStorage.setItem('accessibleProjects', JSON.stringify(this.accessibleProjects));
-      localStorage.setItem('accessibleCameras', JSON.stringify(this.accessibleCameras));
-      localStorage.setItem('accessibleServices', JSON.stringify(this.accessibleServices));
-      localStorage.setItem('canAddUser', this.canAddUser);
-      localStorage.setItem('canGenerateVideoAndPics', this.canGenerateVideoAndPics);
-      localStorage.setItem('manual', this.manual);
-      localStorage.setItem('memoryRole', this.memoryRole);
-      localStorage.setItem('inventoryRole', this.inventoryRole);
-
-      // Emit to subscribers
-      this.userRoleSubject.next(this.userRole);
-      this.canAddUserSubject.next(this.canAddUser === 'true');
-      this.inventoryRoleSubject.next(this.inventoryRole);
-      this.memoryRoleSubject.next(this.memoryRole);
-    }
-  }
-
-  // Set Microsoft user data from account (without AuthenticationResult)
-  private setMicrosoftUserDataFromAccount(account: any): void {
-    if (account) {
-      this.userId = account.localAccountId;
-      this.username = account.name || '';
-      this.useremail = account.username;
-      this.authToken = 'microsoft-token'; // Placeholder token
-      this.userRole = 'Super Admin'; // Default role for Microsoft users
-      this.canAddUser = 'true';
-      this.canGenerateVideoAndPics = 'true';
-      this.manual = 'false';
-      this.memoryRole = 'Super Admin';
-      this.inventoryRole = 'Super Admin';
-      this.accessibleDevelopers = ['all']; // Microsoft users have access to all developers
-      this.accessibleProjects = ['all'];
-      this.accessibleCameras = ['all'];
-      this.accessibleServices = ['all'];
-
-      // Save to localStorage
-      localStorage.setItem('userId', this.userId || '');
-      localStorage.setItem('username', this.username || '');
-      localStorage.setItem('useremail', this.useremail || '');
-      localStorage.setItem('authToken', this.authToken || '');
-      localStorage.setItem('userRole', this.userRole);
-      localStorage.setItem('accessibleDevelopers', JSON.stringify(this.accessibleDevelopers));
-      localStorage.setItem('accessibleProjects', JSON.stringify(this.accessibleProjects));
-      localStorage.setItem('accessibleCameras', JSON.stringify(this.accessibleCameras));
-      localStorage.setItem('accessibleServices', JSON.stringify(this.accessibleServices));
-      localStorage.setItem('canAddUser', this.canAddUser);
-      localStorage.setItem('canGenerateVideoAndPics', this.canGenerateVideoAndPics);
-      localStorage.setItem('manual', this.manual);
-      localStorage.setItem('memoryRole', this.memoryRole);
-      localStorage.setItem('inventoryRole', this.inventoryRole);
-
-      // Emit to subscribers
-      this.userRoleSubject.next(this.userRole);
-      this.canAddUserSubject.next(this.canAddUser === 'true');
-      this.inventoryRoleSubject.next(this.inventoryRole);
-      this.memoryRoleSubject.next(this.memoryRole);
-    }
-  }
 
   logout(): void {
-    // Microsoft logout
-    this.msalService.logoutRedirect({
-      postLogoutRedirectUri: 'https://ahcwatch.awjholding.com'
-    });
-
     // Clear local data
     this.authToken = null;
     this.userId = null;
@@ -393,13 +238,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    // Check Microsoft authentication
-    const msalAccount = this.msalService.instance.getActiveAccount();
-    const isMsalLoggedIn = !!msalAccount;
-    
-    // Check legacy authentication
-    const isLegacyLoggedIn = !!this.authToken || !!localStorage.getItem('authToken');
-    
-    return isMsalLoggedIn || isLegacyLoggedIn;
+    // Check authentication
+    return !!this.authToken || !!localStorage.getItem('authToken');
   }
 }

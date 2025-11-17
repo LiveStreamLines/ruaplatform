@@ -33,30 +33,7 @@ export class LoginComponent implements OnInit {
         this.headerService.showHeaderAndSidenav = true;
         return;
       }
-
-      // Handle Microsoft login redirect
-      this.authService.handleMicrosoftLogin().subscribe({
-        next: (isLoggedIn) => {
-          if (isLoggedIn) {
-            // Add a small delay to ensure MSAL state is properly set
-            setTimeout(() => {
-              this.router.navigate(['/home']); // Redirect to home page
-              this.headerService.showHeaderAndSidenav = true;
-            }, 100);
-          }
-        },
-        error: (error) => {
-          console.error('Microsoft login error:', error);
-          this.loginError = 'Login failed. Please try again.';
-        }
-      });
     }
-  
-  // Microsoft Login
-  onMicrosoftLogin(): void {
-    this.loginError = null;
-    this.authService.loginWithMicrosoft();
-  }
 
   // Temporary Login for Testing
   onTempLogin(): void {

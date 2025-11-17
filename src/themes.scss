@@ -1,34 +1,34 @@
 @use '@angular/material' as mat;
 
-// Define custom earthy brown palette based on the provided color scheme
-$custom-brown-palette: (
-  50: #efece4,
-  100: #dfd9ca,
-  200: #cec6af,
-  300: #beb395,
-  400: #aea07a,
-  500: #9e8d60,
-  600: #706444,
-  700: #5d5339,
-  800: #49422d,
-  900: #363021,
-  A100: #dfd9ca,
-  A200: #beb395,
-  A400: #9e8d60,
-  A700: #5d5339,
+// Define custom golden palette based on #bd9b60
+$custom-golden-palette: (
+  50: #f5f2e8,
+  100: #ebe5d1,
+  200: #e1d8ba,
+  300: #d7cba3,
+  400: #cdbe8c,
+  500: #bd9b60,
+  600: #8a7147,
+  700: #6d5838,
+  800: #503f29,
+  900: #33261a,
+  A100: #ebe5d1,
+  A200: #d7cba3,
+  A400: #bd9b60,
+  A700: #6d5838,
   contrast: (
-    50: #363021,
-    100: #363021,
-    200: #363021,
-    300: #363021,
+    50: #33261a,
+    100: #33261a,
+    200: #33261a,
+    300: #33261a,
     400: #ffffff,
     500: #ffffff,
     600: #ffffff,
     700: #ffffff,
     800: #ffffff,
     900: #ffffff,
-    A100: #363021,
-    A200: #363021,
+    A100: #33261a,
+    A200: #33261a,
     A400: #ffffff,
     A700: #ffffff,
   )
@@ -36,8 +36,8 @@ $custom-brown-palette: (
 
 $custom-theme: mat.define-theme((
   color: (
-    primary: mat.define-palette($custom-brown-palette, 500, 100, 900),
-    accent: mat.define-palette($custom-brown-palette, 300, 200, 700),
+    primary: mat.define-palette($custom-golden-palette, 500, 100, 900),
+    accent: mat.define-palette($custom-golden-palette, 300, 200, 700),
     use-system-variables: true,
   ),
   typography: (

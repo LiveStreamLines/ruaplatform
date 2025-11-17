@@ -1,20 +1,20 @@
 {
-  "name": "AHC Timelapse Platform",
-  "short_name": "AHC Timelapse",
+  "name": "Rua Al Madina Timelapse",
+  "short_name": "Rua Timelapse",
   "description": "AWJ Holding comprehensive timelapse monitoring platform",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#9e8d60",
+  "theme_color": "#bd9b60",
   "icons": [
     {
-      "src": "awjlogo.png",
+      "src": "LOGORUA.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "awjlogo.png",
+      "src": "LOGORUA.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

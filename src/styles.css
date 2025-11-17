@@ -63,12 +63,12 @@ html, body {
   }
 
   .mat-mdc-tab:hover {
-    color: #9e8d60 !important;
+    color: #bd9b60 !important;
     background-color: rgba(158, 141, 96, 0.05) !important;
   }
 
   .mat-mdc-tab.mdc-tab--active {
-    color: #9e8d60 !important;
+    color: #bd9b60 !important;
     font-weight: 600 !important;
   }
 
@@ -89,8 +89,8 @@ html, body {
 
 
   :root {
-    --mat-primary-color: #00796b; /* Update primary color */
-    --mat-accent-color: #c2185b; /* Update accent color */
+    --mat-primary-color: #bd9b60; /* RUA Logo primary color */
+    --mat-accent-color: #bd9b60; /* RUA Logo accent color */
     --mat-warn-color: #d32f2f; /* Update warn color */
     --mat-app-background-color: #ffffff;
     --mat-app-text-color: #000000;
@@ -105,21 +105,21 @@ html, body {
     --mdc-outlined-text-field-focus-outline-color: #710707;
     --mdc-outlined-text-field-focus-label-text-color: white;
     --mdc-outlined-text-field-focus-outline-coloor: red;
-    --mdc-tab-indicator-active-indicator-color: #9e8d60;
+    --mdc-tab-indicator-active-indicator-color: #bd9b60;
     --mdc-tab-indicator-active-indicator-height: 3px;
     --mdc-tab-indicator-active-indicator-shape: 0;
-    --mat-tab-header-divider-color: rgba(158, 141, 96, 0.2);
+    --mat-tab-header-divider-color: rgba(189, 155, 96, 0.2);
     --mat-tab-header-pagination-icon-color: #666;
     --mat-tab-header-inactive-label-text-color: #666;
-    --mat-tab-header-active-label-text-color: #9e8d60;
-    --mat-tab-header-active-ripple-color: rgba(158, 141, 96, 0.1);
-    --mat-tab-header-inactive-ripple-color: rgba(158, 141, 96, 0.05);
-    --mat-tab-header-inactive-focus-label-text-color: #9e8d60;
-    --mat-tab-header-inactive-hover-label-text-color: #9e8d60;
-    --mat-tab-header-active-focus-label-text-color: #9e8d60;
-    --mat-tab-header-active-hover-label-text-color: #9e8d60;
-    --mat-tab-header-active-focus-indicator-color: #9e8d60;
-    --mat-tab-header-active-hover-indicator-color: #706444;
+    --mat-tab-header-active-label-text-color: #bd9b60;
+    --mat-tab-header-active-ripple-color: rgba(189, 155, 96, 0.1);
+    --mat-tab-header-inactive-ripple-color: rgba(189, 155, 96, 0.05);
+    --mat-tab-header-inactive-focus-label-text-color: #bd9b60;
+    --mat-tab-header-inactive-hover-label-text-color: #bd9b60;
+    --mat-tab-header-active-focus-label-text-color: #bd9b60;
+    --mat-tab-header-active-hover-label-text-color: #bd9b60;
+    --mat-tab-header-active-focus-indicator-color: #bd9b60;
+    --mat-tab-header-active-hover-indicator-color: #8a7147;
     --mat-tab-header-label-text-font: Roboto, sans-serif;
     --mat-tab-header-label-text-size: 0.875rem;
     --mat-tab-header-label-text-tracking: 0.006rem;

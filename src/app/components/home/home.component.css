@@ -1,4 +1,4 @@
-/* AHC Timelapse Home Component - White & Gold Theme */
+/* Rua Al Madina Timelapse Home Component - White & Gold Theme */
 
 /* Main Layout */
 .home-layout {
@@ -12,10 +12,10 @@
 
 /* Welcome Section */
 .welcome-section {
-  background: linear-gradient(135deg, #9e8d60 0%, #beb395 100%);
+  background: linear-gradient(135deg, #bd9b60 0%, #d7cba3 100%);
   padding: 40px 20px;
   text-align: left;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 20px rgba(189, 155, 96, 0.2);
   position: relative;
   overflow: hidden;
 }
@@ -75,7 +75,7 @@
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: #9e8d60;
+  color: #bd9b60;
 }
 
 .loading-container p {
@@ -101,7 +101,7 @@
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  border: 2px solid rgba(212, 175, 55, 0.1);
+  border: 2px solid rgba(189, 155, 96, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
   overflow: hidden;
@@ -115,13 +115,13 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #9e8d60 0%, #beb395 100%);
+  background: linear-gradient(90deg, #bd9b60 0%, #d7cba3 100%);
 }
 
 .developer-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 15px 35px rgba(189, 155, 96, 0.2);
+  border-color: rgba(189, 155, 96, 0.3);
 }
 
 /* Card Header */
@@ -151,12 +151,12 @@
   border-radius: 12px;
   background: #f8f9fa;
   padding: 10px;
-  border: 2px solid rgba(212, 175, 55, 0.1);
+  border: 2px solid rgba(189, 155, 96, 0.1);
   transition: all 0.3s ease;
 }
 
 .developer-card:hover .developer-logo {
-  border-color: rgba(212, 175, 55, 0.3);
+  border-color: rgba(189, 155, 96, 0.3);
   transform: scale(1.05);
 }
 
@@ -191,7 +191,7 @@
   font-size: 0.9rem !important;
   text-transform: none !important;
   letter-spacing: 0.5px !important;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(189, 155, 96, 0.3) !important;
   transition: all 0.3s ease !important;
   display: flex !important;
   align-items: center !important;
@@ -199,9 +199,9 @@
 }
 
 .view-projects-btn:hover {
-  background: linear-gradient(135deg, #706444 0%, #9e8d60 100%) !important;
+  background: linear-gradient(135deg, #8a7147 0%, #bd9b60 100%) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(189, 155, 96, 0.4) !important;
 }
 
 .view-projects-btn mat-icon {
@@ -219,7 +219,7 @@
 
 .no-results-icon {
   font-size: 4rem;
-  color: #9e8d60;
+  color: #bd9b60;
   margin-bottom: 20px;
   opacity: 0.7;
 }
