@@ -1,11 +1,11 @@
 [
-{
-    "_id": "0f35c77efdf89a876cf1d329",
-    "developerName": "Awj Holding",
-    "developerTag": "awj",
-    "description": "Awj Holding",
-    "isActive": "true",
-    "createdDate": "2025-06-03T13:20:53.337Z",
-    "logo": "logos/developer/0f35c77efdf89a876cf1d329.jpg"
+  {
+    "_id": "6493e2556be3e33e6f4f6f68",
+    "description": "Initiated and fully owned by the Public Investment Fund Royal Decree No. (23441) date 19/05/1438 H, RUA Al Madinah Holding is dedicated to achieving the National Transformation Program of the Vision 2030, aiming to develop and diversify the economic base by strengthening the position of Al Madina Al Munawwarah as a prestigious religious destination with a modern architectural system derived from its ancient history, where the company aims through its promising project, Rua Al-Madina, to raise the readiness of the central area of the Prophet’s Mosque by developing a distinct urban environment with a modern infrastructure to host more visitors in line with the goals of the vision.",
+    "developerName": "Rua AlMadinah Holding",
+    "developerTag": "ruaalmadina",
+    "isActive": true,
+    "logo": "img/upload/6493e2556be3e33e6f4f6f68.png",
+    "createdDate":"2023-06-22T05:55:33.019Z"
   }
 ]

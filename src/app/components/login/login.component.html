@@ -59,6 +59,37 @@
 
         <!-- Login Form -->
         <div class="login-form-section">
+          <form (ngSubmit)="onTempLogin()" #loginForm="ngForm">
+            <div class="form-group">
+              <input 
+                type="email" 
+                [(ngModel)]="tempEmail" 
+                name="tempEmail" 
+                placeholder="Email" 
+                required 
+                class="form-input"
+              >
+            </div>
+            <div class="form-group">
+              <input 
+                type="password" 
+                [(ngModel)]="tempPassword" 
+                name="tempPassword" 
+                placeholder="Password" 
+                required 
+                class="form-input"
+              >
+            </div>
+            <button 
+              type="submit" 
+              mat-raised-button 
+              class="login-btn"
+              [disabled]="!loginForm.form.valid"
+            >
+              Sign In
+            </button>
+          </form>
+          
           <div *ngIf="loginError" class="error-message">
             {{ loginError }}
           </div>
