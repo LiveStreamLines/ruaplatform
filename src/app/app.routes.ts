@@ -71,9 +71,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} }, // Route for adding a new camera
   { path: 'camera-form/:id', component: CameraFormComponent,  
     canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} }, // Route for editing a camera by ID
-  { path: 'users', component: UsersComponent,  canActivate: [AuthGuard] },
-  { path: 'users/add', component: UserFormComponent,  canActivate: [AuthGuard] },
-  { path: 'users/edit/:id', component: UserFormComponent,  canActivate: [AuthGuard] }, // Route for editing
+  { path: 'users', component: UsersComponent,  canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
+  { path: 'users/add', component: UserFormComponent,  canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
+  { path: 'users/edit/:id', component: UserFormComponent,  canActivate: [AuthGuard], data: {roles: ['Super Admin']} }, // Route for editing
   { path: 'gallery', component: GalleryComponent,  canActivate: [AuthGuard]},
   { path: 'gallery/video-request', component: VideoRequestComponent,  canActivate: [AuthGuard]},
   { path: 'gallery/photo-request', component: PhotoRequestComponent,  canActivate: [AuthGuard]},

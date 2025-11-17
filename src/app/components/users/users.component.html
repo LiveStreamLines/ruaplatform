@@ -2,42 +2,52 @@
     
     <h1 class="page-title">Users</h1>
     
-    <div style="margin: 15px 0">
-      <input class='search' matInput [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search by name, email, or role">
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search by name, email, or role</mat-label>
+        <input matInput [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search users...">
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
     </div>
 
-    <!-- Developer Filter -->
-    <mat-form-field appearance="outline">
-      <mat-label>Filter by Developer</mat-label>
-      <mat-select [(ngModel)]="selectedDeveloperId" (selectionChange)="onDeveloperChange()">
-        <mat-option *ngFor="let developer of developers" [value]="developer._id">
-          {{ developer.developerName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="filters-container">
+      <!-- Developer Filter -->
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Filter by Developer</mat-label>
+        <mat-select [(ngModel)]="selectedDeveloperId" (selectionChange)="onDeveloperChange()">
+          <mat-option *ngFor="let developer of developers" [value]="developer._id">
+            {{ developer.developerName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- Project Filter -->
-    <mat-form-field appearance="outline" *ngIf="projects.length">
-      <mat-label>Filter by Project</mat-label>
-      <mat-select [(ngModel)]="selectedProjectId" (selectionChange)="onProjectChange()">
-        <mat-option *ngFor="let project of projects" [value]="project._id">
-          {{ project.projectName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Project Filter -->
+      <mat-form-field appearance="outline" class="filter-field" *ngIf="projects.length">
+        <mat-label>Filter by Project</mat-label>
+        <mat-select [(ngModel)]="selectedProjectId" (selectionChange)="onProjectChange()">
+          <mat-option *ngFor="let project of projects" [value]="project._id">
+            {{ project.projectName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <!-- Camera Filter -->
-    <mat-form-field appearance="outline" *ngIf="cameras.length">
-      <mat-label>Filter by Camera</mat-label>
-      <mat-select [(ngModel)]="selectedCameraId" (selectionChange)="filterUsersByAccess()">
-        <mat-option *ngFor="let camera of cameras" [value]="camera._id">
-          {{ camera.cameraDescription }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Camera Filter -->
+      <mat-form-field appearance="outline" class="filter-field" *ngIf="cameras.length">
+        <mat-label>Filter by Camera</mat-label>
+        <mat-select [(ngModel)]="selectedCameraId" (selectionChange)="filterUsersByAccess()">
+          <mat-option *ngFor="let camera of cameras" [value]="camera._id">
+            {{ camera.cameraDescription }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-  
-    <button class="add-new-button" mat-raised-button style="color: white; background-color: brown;" (click)="openAddUser()">Add New User</button>
+    <div class="actions-container">
+      <button class="add-new-button" mat-raised-button (click)="openAddUser()">
+        <mat-icon>person_add</mat-icon>
+        <span>Add New User</span>
+      </button>
+    </div>
   
     <!-- Loading Spinner -->
     <div *ngIf="isLoading" class="spinner-container">
