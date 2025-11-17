@@ -6,9 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from '../../services/auth.service';  // Import the AuthService
 import { BreadcrumbService } from '../../services/breadcrumb.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ManualVideoDialogComponent } from '../manual-video-dialog/manual-video-dialog.component';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-header',
@@ -31,7 +32,9 @@ export class HeaderComponent {
   constructor(
     private authService: AuthService,
     private breadcrumbService: BreadcrumbService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private headerService: HeaderService
   ) {}
 
   ngOnInit() {
@@ -57,5 +60,7 @@ export class HeaderComponent {
 
   logout() {
     this.authService.logout();  // Call the logout function in AuthService
+    this.headerService.showHeaderAndSidenav = false;  // Hide header and sidenav
+    this.router.navigate(['/login']);  // Redirect to login page
   }
 }
