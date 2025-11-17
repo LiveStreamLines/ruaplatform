@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   position: relative;
 }
 
@@ -100,7 +100,7 @@
   border: 2px solid rgba(189, 155, 96, 0.3);
   border-radius: 8px;
   font-size: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #ffffff;
   color: #333;
   transition: all 0.3s ease;

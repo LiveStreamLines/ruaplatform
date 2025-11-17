@@ -1,10 +1,11 @@
-/* AWJ Header - Gold & White Theme */
+/* RUA Header - Gold & White Theme */
 
 .awj-header {
   background: linear-gradient(135deg, #bd9b60 0%, #d7cba3 100%) !important;
   color: white !important;
   box-shadow: 0 2px 8px rgba(189, 155, 96, 0.3);
   border-bottom: 2px solid rgba(189, 155, 96, 0.4);
+  font-family: 'Inter', 'Poppins', sans-serif;
 }
 
 .spacer {

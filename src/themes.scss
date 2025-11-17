@@ -41,6 +41,11 @@ $custom-theme: mat.define-theme((
     use-system-variables: true,
   ),
   typography: (
+    brand-family: 'Inter, Poppins, sans-serif',
+    plain-family: 'Inter, Poppins, sans-serif',
+    bold-weight: 700,
+    regular-weight: 400,
+    medium-weight: 500,
     use-system-variables: true,
   ),
 ));

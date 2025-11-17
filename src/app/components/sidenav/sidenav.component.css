@@ -1,4 +1,4 @@
-/* AWJ Sidenav - Gold & White Theme */
+/* RUA Sidenav - Gold & White Theme */
 
 .sidenav-container {
   height: 100%;
@@ -6,6 +6,7 @@
   border-right: 2px solid rgba(189, 155, 96, 0.2);
   overflow-x: hidden;
   overflow-y: auto;
+  font-family: 'Inter', 'Poppins', sans-serif;
 }
 
 /* AWJ Logo Header */
