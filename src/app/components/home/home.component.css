@@ -126,7 +126,7 @@
 
 /* Card Header */
 .card-header {
-  padding: 20px 20px 10px 20px;
+  padding: 15px 20px 8px 20px;
   text-align: center;
 }
 
@@ -140,19 +140,26 @@
 
 /* Card Image Container */
 .card-image-container {
-  padding: 0 20px;
+  padding: 10px 15px;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .developer-logo {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 200px;
+  max-height: 280px;
   object-fit: contain;
   border-radius: 12px;
   background: #f8f9fa;
-  padding: 10px;
+  padding: 15px;
   border: 2px solid rgba(189, 155, 96, 0.1);
   transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
 }
 
 .developer-card:hover .developer-logo {
@@ -162,7 +169,7 @@
 
 /* Card Description */
 .card-description {
-  padding: 15px 20px;
+  padding: 10px 20px;
   text-align: center;
 }
 

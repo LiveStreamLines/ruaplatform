@@ -52,13 +52,13 @@ import { User } from '../../models/user.model';
 
        // Check local storage for user preference
       const dontShowAgain = this.authService.getManual();
-      if (!dontShowAgain) {
-        // Open the dialog if preference is not set
-        this.dialog.open(ManualVideoDialogComponent, {
-          data: { title: 'Manual', videoUrl: 'assets/videos/manual.mp4' },
-          panelClass: 'fullscreen-dialog', // Add a custom class for fullscreen styling
-        });
-      }
+      // if (!dontShowAgain) {
+      //   // Open the dialog if preference is not set
+      //   this.dialog.open(ManualVideoDialogComponent, {
+      //     data: { title: 'Manual', videoUrl: 'assets/videos/manual.mp4' },
+      //     panelClass: 'fullscreen-dialog', // Add a custom class for fullscreen styling
+      //   });
+      // }
 
       this.userRole = this.authService.getUserRole();
       this.accessibleDevelopers = this.authService.getAccessibleDevelopers();
