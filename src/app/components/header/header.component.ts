@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input, Inject} from '@angular/core';
 import { CommonModule } from '@angular/common';  // Import CommonModule for ngFor and ngIf
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,8 @@ import { Router, RouterLink } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ManualVideoDialogComponent } from '../manual-video-dialog/manual-video-dialog.component';
 import { HeaderService } from '../../services/header.service';
+import { MsalService, MSAL_INSTANCE } from '@azure/msal-angular';
+import { IPublicClientApplication } from '@azure/msal-browser';
 
 @Component({
   selector: 'app-header',
@@ -34,7 +36,9 @@ export class HeaderComponent {
     private breadcrumbService: BreadcrumbService,
     private dialog: MatDialog,
     private router: Router,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    @Inject(MSAL_INSTANCE) private msalInstance: IPublicClientApplication,
+    private msalService: MsalService
   ) {}
 
   ngOnInit() {
@@ -58,8 +62,20 @@ export class HeaderComponent {
     this.sidenav.toggle();
   }
 
-  logout() {
-    this.authService.logout();  // Call the logout function in AuthService
+  async logout() {
+    // Check if user is logged in via SSO (MSAL)
+    const accounts = this.msalInstance.getAllAccounts();
+    if (accounts.length > 0) {
+      // Logout from MSAL
+      try {
+        await this.msalService.logoutPopup();
+      } catch (error) {
+        console.error('MSAL logout error:', error);
+      }
+    }
+    
+    // Call the logout function in AuthService
+    this.authService.logout();
     this.headerService.showHeaderAndSidenav = false;  // Hide header and sidenav
     this.router.navigate(['/login']);  // Redirect to login page
   }

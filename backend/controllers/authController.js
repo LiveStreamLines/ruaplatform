@@ -194,9 +194,64 @@ function resetPassword(req, res) {
   
 }
 
+// SSO Login - Authenticate user via Microsoft SSO and check against users list
+function ssoLogin(req, res) {
+    const { email, name } = req.body;
+    
+    // Validate input
+    if (!email) {
+        return res.status(400).json({ msg: 'Email is required' });
+    }
+    
+    logger.info("SSO login request: ", { email, name });
+    
+    try {
+        // Find user by email in the users list
+        const users = userData.getUserByEmail(email);
+        
+        if (!users || users.length === 0) {
+            logger.warn(`SSO login failed: User not found in users list - ${email}`);
+            return res.status(403).json({ 
+                msg: 'Access denied. Your account is not authorized. Please contact your administrator.' 
+            });
+        }
+        
+        const user = users[0];
+        
+        // Check if user is active
+        if (!user.isActive) {
+            logger.warn(`SSO login failed: User account is inactive - ${email}`);
+            return res.status(403).json({ msg: 'User account is inactive' });
+        }
+        
+        // Update last login time
+        const logintime = new Date().toISOString();
+        const updatedUser = userData.updateItem(user._id, {"LastLoginTime": logintime});
+        
+        // Create a JWT token with user information
+        const authToken = jwt.sign(
+            { email: user.email, role: user.role },
+            'secretKey'
+        );
+        
+        logger.info(`SSO login successful for user: ${email}`);
+        
+        // Return user data with permissions from users list
+        res.json({ 
+            ...user,
+            authh: authToken,
+            LastLoginTime: logintime
+        });
+    } catch (error) {
+        logger.error('SSO login error:', error);
+        res.status(500).json({ msg: 'Internal server error during SSO login' });
+    }
+}
+
 module.exports = {
     login,
     getUserByEmail,
     sendResetPasswordLink,
-    resetPassword
+    resetPassword,
+    ssoLogin
 };

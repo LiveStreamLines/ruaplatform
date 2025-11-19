@@ -4,6 +4,7 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 
 router.post('/login', authController.login);
+router.post('/sso-login', authController.ssoLogin);
 router.get('/email/:email', authController.getUserByEmail);
 router.post('/reset-link', authController.sendResetPasswordLink);
 router.post('/reset-password', authController.resetPassword);

@@ -57,8 +57,35 @@
           </form>
         </div> -->
 
-        <!-- Login Form -->
-        <div class="login-form-section">
+        <!-- SSO Login Section -->
+        <div class="sso-login-section">
+          <button 
+            mat-raised-button 
+            class="sso-login-btn"
+            (click)="onSSOLogin()"
+            [disabled]="isSSOLoading"
+            style="width: 100%; padding: 12px; margin-bottom: 20px; background-color: #0078d4; color: white; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;"
+          >
+            <mat-icon>account_circle</mat-icon>
+            <span>{{ isSSOLoading ? 'Signing in...' : 'Sign in with Microsoft' }}</span>
+          </button>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TEMP LOGIN SECTION - COMMENT OUT WHEN DONE -->
+        <!-- ============================================ -->
+        <!-- Divider -->
+        <div class="divider" style="display: flex; align-items: center; margin: 20px 0;">
+          <div style="flex: 1; height: 1px; background-color: #ddd;"></div>
+          <span style="padding: 0 15px; color: #666; font-size: 14px;">OR</span>
+          <div style="flex: 1; height: 1px; background-color: #ddd;"></div>
+        </div>
+
+        <!-- Temp Login Form (Bypasses Microsoft SSO) -->
+        <div class="temp-login-section" style="background-color: #fff3cd; padding: 15px; border-radius: 4px; border: 1px solid #ffc107; margin-bottom: 20px;">
+          <h3 style="color: #856404; margin-bottom: 15px; font-size: 14px; font-weight: 600;">
+            ⚠️ TEMP LOGIN (For Testing Only - Will be removed)
+          </h3>
           <form (ngSubmit)="onTempLogin()" #loginForm="ngForm">
             <div class="form-group">
               <input 
@@ -83,10 +110,11 @@
             <button 
               type="submit" 
               mat-raised-button 
-              class="login-btn"
+              class="temp-login-btn"
               [disabled]="!loginForm.form.valid"
+              style="width: 100%; padding: 12px; background-color: #ff6b35; color: white; border: none; border-radius: 4px; cursor: pointer;"
             >
-              Sign In
+              Temp Login
             </button>
           </form>
           
@@ -94,6 +122,9 @@
             {{ loginError }}
           </div>
         </div>
+        <!-- ============================================ -->
+        <!-- END TEMP LOGIN SECTION -->
+        <!-- ============================================ -->
 
         <!-- Footer -->
         <div class="login-footer">

@@ -103,6 +103,17 @@ export class AuthService {
     );
   }
 
+  // SSO Login - Authenticate via Microsoft SSO and verify against users list
+  ssoLogin(email: string, name?: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/sso-login`, { email, name }).pipe(
+      tap((response) => {
+        if (response && response.authh) {
+          this.setUserData(response);
+        }
+      })
+    );
+  }
+
 
 
   logout(): void {
