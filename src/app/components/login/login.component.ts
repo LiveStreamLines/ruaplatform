@@ -72,14 +72,20 @@ export class LoginComponent implements OnInit {
         prompt: 'select_account'
       };
 
-      const response = await this.msalService.loginPopup(loginRequest);
-      
-      if (response && response.account) {
-        const email = response.account.username;
-        const name = response.account.name;
-        
-        await this.processSSOLogin(email, name);
-      }
+      this.msalService.loginPopup(loginRequest).subscribe({
+        next: (response) => {
+          if (response && response.account) {
+            const email = response.account.username;
+            const name = response.account.name;
+            this.processSSOLogin(email, name);
+          }
+        },
+        error: (error: any) => {
+          console.error('SSO login error:', error);
+          this.loginError = error.error?.message || 'SSO login failed. Please try again.';
+          this.isSSOLoading = false;
+        }
+      });
     } catch (error: any) {
       console.error('SSO login error:', error);
       this.loginError = error.error?.message || 'SSO login failed. Please try again.';
@@ -88,29 +94,30 @@ export class LoginComponent implements OnInit {
   }
 
   // Process SSO login - verify user against users list
-  private async processSSOLogin(email: string, name?: string): Promise<void> {
-    try {
-      this.authService.ssoLogin(email, name).subscribe({
-        next: (response) => {
-          if (response && response.authh) {
-            this.router.navigate(['/home']);
-            this.headerService.showHeaderAndSidenav = true;
-            this.isSSOLoading = false;
-          }
-        },
-        error: (error) => {
-          console.error('SSO verification error:', error);
-          this.loginError = error.error?.msg || 'Access denied. Your account is not authorized.';
+  private processSSOLogin(email: string, name?: string): void {
+    this.authService.ssoLogin(email, name).subscribe({
+      next: (response) => {
+        if (response && response.authh) {
+          this.router.navigate(['/home']);
+          this.headerService.showHeaderAndSidenav = true;
           this.isSSOLoading = false;
-          // Logout from Microsoft if user is not in users list
-          this.msalService.logoutPopup();
         }
-      });
-    } catch (error) {
-      console.error('Error processing SSO login:', error);
-      this.loginError = 'An error occurred during SSO login.';
-      this.isSSOLoading = false;
-    }
+      },
+      error: (error) => {
+        console.error('SSO verification error:', error);
+        this.loginError = error.error?.msg || 'Access denied. Your account is not authorized.';
+        this.isSSOLoading = false;
+        // Logout from Microsoft if user is not in users list
+        this.msalService.logoutPopup().subscribe({
+          next: () => {
+            console.log('Logged out from Microsoft');
+          },
+          error: (logoutError) => {
+            console.error('MSAL logout error:', logoutError);
+          }
+        });
+      }
+    });
   }
 
   // ============================================
