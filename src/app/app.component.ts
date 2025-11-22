@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Import CommonModule for ngFor and ngIf
 import { HeaderComponent } from './components/header/header.component';  // Import HeaderComponent
@@ -7,6 +7,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';  // Import Angular
 import { MatListModule } from '@angular/material/list';  // Import Angular Material List
 import { HeaderService } from './services/header.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MSAL_INSTANCE } from '@azure/msal-angular';
+import { IPublicClientApplication } from '@azure/msal-browser';
 
 @Component({
   selector: 'app-root',
@@ -30,10 +32,17 @@ export class AppComponent {
 
   constructor(
     public headerService: HeaderService, 
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    @Inject(MSAL_INSTANCE) private msalInstance: IPublicClientApplication
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    // Initialize MSAL before using it
+    // Initialize is idempotent, safe to call multiple times
+    await this.msalInstance.initialize().catch(() => {
+      // If already initialized, this will fail silently
+    });
+
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet])
       .subscribe(result => {
         if (result.matches) {

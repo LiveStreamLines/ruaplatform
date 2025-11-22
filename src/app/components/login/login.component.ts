@@ -31,8 +31,14 @@ export class LoginComponent implements OnInit {
     private msalService: MsalService
   ) {}
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
       this.headerService.showHeaderAndSidenav = false;
+
+      // Ensure MSAL is initialized before using it
+      // Initialize is idempotent, safe to call multiple times
+      await this.msalInstance.initialize().catch(() => {
+        // If already initialized, this will fail silently
+      });
 
       // Check if already logged in
       if (this.authService.isLoggedIn()) {
@@ -48,12 +54,24 @@ export class LoginComponent implements OnInit {
   // Handle SSO redirect callback
   private async handleSSORedirect(): Promise<void> {
     try {
+      // Handle redirect promise first
+      const response = await this.msalInstance.handleRedirectPromise();
+      
+      if (response && response.account) {
+        // User just completed redirect login
+        const email = response.account.username;
+        const name = response.account.name;
+        this.processSSOLogin(email, name);
+        return;
+      }
+
+      // Check if user is already authenticated
       const accounts = this.msalInstance.getAllAccounts();
       if (accounts.length > 0) {
         // User is already authenticated via SSO, get account info
         const account = accounts[0];
         if (account.username) {
-          await this.processSSOLogin(account.username, account.name || undefined);
+          this.processSSOLogin(account.username, account.name || undefined);
         }
       }
     } catch (error) {
@@ -67,28 +85,32 @@ export class LoginComponent implements OnInit {
     this.isSSOLoading = true;
 
     try {
+      // Ensure MSAL is initialized before using it
+      // Initialize is idempotent, safe to call multiple times
+      await this.msalInstance.initialize().catch(() => {
+        // If already initialized, this will fail silently
+      });
+
       const loginRequest = {
         scopes: ['User.Read'],
         prompt: 'select_account'
       };
 
-      this.msalService.loginPopup(loginRequest).subscribe({
-        next: (response) => {
-          if (response && response.account) {
-            const email = response.account.username;
-            const name = response.account.name;
-            this.processSSOLogin(email, name);
-          }
+      // Use redirect instead of popup for better compatibility
+      this.msalService.loginRedirect(loginRequest).subscribe({
+        next: () => {
+          // Redirect will happen, so we don't need to do anything here
+          // The handleSSORedirect() will be called when user returns
         },
         error: (error: any) => {
           console.error('SSO login error:', error);
-          this.loginError = error.error?.message || 'SSO login failed. Please try again.';
+          this.loginError = error.error?.message || error.message || 'SSO login failed. Please try again.';
           this.isSSOLoading = false;
         }
       });
     } catch (error: any) {
       console.error('SSO login error:', error);
-      this.loginError = error.error?.message || 'SSO login failed. Please try again.';
+      this.loginError = error.error?.message || error.message || 'SSO login failed. Please try again.';
       this.isSSOLoading = false;
     }
   }
