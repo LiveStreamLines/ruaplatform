@@ -93,7 +93,8 @@ export class ProjectListComponent implements OnInit {
 
    // This method is called when a project is clicked
    onProjectClick(project: Project): void {
-    this.router.navigate([`/home/${this.developerTag}/${project.projectTag}`]);
+    // Navigate directly to camera-list (timelapse) instead of services page
+    this.router.navigate([`/home/${this.developerTag}/${project.projectTag}/timelapse`]);
   }
 
   goBack(): void {

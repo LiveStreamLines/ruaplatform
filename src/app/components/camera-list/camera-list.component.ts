@@ -162,7 +162,7 @@ export class CameraListComponent implements OnInit {
   }
 
   goBack(): void {
-  // This method is called when a project is clicked
-  this.router.navigate([`/home/${this.developerTag}/${this.projectTag}`]);
+  // Navigate directly to project list, skipping services page
+  this.router.navigate([`/home/${this.developerTag}`]);
   }
 }
