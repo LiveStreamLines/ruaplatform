@@ -29,7 +29,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
-  displayedColumns: string[] = ['logo', 'name', 'status', 'createdDate', 'blockUnblock', 'actions'];
+  displayedColumns: string[] = ['logo', 'name', 'createdDate', 'actions'];
   dataSource = new MatTableDataSource<Project>();
   developers: Developer[] = []; // List of developers for dropdown
   selectedDeveloperId: string = ''; // Holds the currently selected developer ID

@@ -88,9 +88,20 @@ class DataModel {
     }
 
      // New Method: Get Items by Project ID (specific to Cameras)
+     // Returns cameras where project matches main project OR project is in additionalProjects array
      getCameraByProjectId(projectId) {
         const data = this.readData();
-        return data.filter(item => item.project === projectId);
+        return data.filter(item => {
+            // Check if camera's main project matches
+            if (item.project === projectId) {
+                return true;
+            }
+            // Check if project is in additionalProjects array
+            if (item.additionalProjects && Array.isArray(item.additionalProjects)) {
+                return item.additionalProjects.includes(projectId);
+            }
+            return false;
+        });
     }
 
     getCameraByDeveloperId(developerId) {

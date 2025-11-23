@@ -1,7 +1,39 @@
+h2[mat-dialog-title] {
+  text-align: left;
+  font-weight: 600;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-size: 32px;
+  color: #333333;
+  margin: 0 0 24px 0;
+  padding: 0 0 12px 0;
+  border-bottom: 2px solid rgba(189, 155, 96, 0.3);
+  letter-spacing: -0.02em;
+  display: inline-block;
+}
+
 h2 {
-  text-align: center;
-  font-weight: 500;
-  margin-bottom: 24px;
+  text-align: left;
+  font-weight: 600;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-size: 32px;
+  color: #333333;
+  margin: 0 0 24px 0;
+  padding: 0 0 12px 0;
+  border-bottom: 2px solid rgba(189, 155, 96, 0.3);
+  letter-spacing: -0.02em;
+  display: inline-block;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  padding: 24px !important;
+}
+
+.dialog-content {
+  padding: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  background-color: #ffffff;
 }
 
 .full-width {
@@ -18,15 +50,18 @@ h2 {
   display: flex;
   gap: 16px;
   align-items: flex-start;
+  margin-bottom: 8px;
 }
 
 h3 {
-  color: #333;
-  margin: 24px 0 16px 0;
+  color: #bd9b60;
+  margin: 32px 0 20px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid #e0e0e0;
-  font-size: 18px;
+  border-bottom: 2px solid rgba(189, 155, 96, 0.3);
+  font-size: 20px;
   font-weight: 600;
+  font-family: 'Inter', 'Poppins', sans-serif;
+  letter-spacing: -0.01em;
 }
 
 h3:first-child {
@@ -34,33 +69,215 @@ h3:first-child {
 }
 
 .logo-upload {
-  margin: 16px 0;
-  padding: 16px;
-  border: 2px dashed #ccc;
+  margin: 20px 0;
+  padding: 20px;
+  border: 2px dashed rgba(189, 155, 96, 0.4);
   border-radius: 8px;
   text-align: center;
+  background-color: rgba(189, 155, 96, 0.05);
+  transition: all 0.3s ease;
+}
+
+.logo-upload:hover {
+  border-color: rgba(189, 155, 96, 0.6);
+  background-color: rgba(189, 155, 96, 0.08);
 }
 
 .logo-upload mat-label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #333333;
+  font-family: 'Inter', 'Poppins', sans-serif;
 }
 
 .logo-preview {
   max-width: 200px;
   max-height: 100px;
   margin-top: 12px;
-  border-radius: 4px;
+  border-radius: 8px;
+  border: 2px solid rgba(189, 155, 96, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dialog-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #e0e0e0;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(189, 155, 96, 0.2);
+}
+
+/* Form field styling */
+mat-form-field {
+  margin-bottom: 8px;
+}
+
+mat-checkbox {
+  margin: 16px 0;
+  display: block;
+}
+
+/* Error styling */
+::ng-deep .mat-mdc-form-field-error {
+  color: #f44336;
+  font-size: 12px;
+  font-family: 'Inter', 'Poppins', sans-serif;
+}
+
+/* Force white background for all form fields */
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-form-field .mdc-text-field--outlined {
+  background-color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: rgba(189, 155, 96, 0.4) !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-text-field--outlined .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-text-field--outlined .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: #bd9b60 !important;
+  border-width: 2px !important;
+}
+
+/* Force dark text for all inputs */
+::ng-deep .mat-mdc-form-field input,
+::ng-deep .mat-mdc-form-field textarea,
+::ng-deep .mat-mdc-form-field .mat-mdc-form-field-input-control input,
+::ng-deep .mat-mdc-form-field .mdc-text-field__input {
+  color: #333333 !important;
+  -webkit-text-fill-color: #333333 !important;
+  font-family: 'Inter', 'Poppins', sans-serif !important;
+}
+
+/* Force dark text for labels */
+::ng-deep .mat-mdc-form-field .mat-mdc-floating-label {
+  color: rgba(51, 51, 51, 0.6) !important;
+  font-family: 'Inter', 'Poppins', sans-serif !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-floating-label,
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-floating-label.mdc-floating-label--float-above {
+  color: #bd9b60 !important;
+}
+
+/* Force dark text for select values */
+::ng-deep .mat-mdc-select-value,
+::ng-deep .mat-mdc-select-value-text {
+  color: #333333 !important;
+  font-family: 'Inter', 'Poppins', sans-serif !important;
+}
+
+::ng-deep .mat-mdc-select-arrow {
+  color: rgba(189, 155, 96, 0.7) !important;
+}
+
+/* Force placeholder text color */
+::ng-deep .mat-mdc-form-field input::placeholder,
+::ng-deep .mat-mdc-form-field textarea::placeholder,
+::ng-deep .mat-mdc-form-field .mdc-text-field__input::placeholder {
+  color: rgba(51, 51, 51, 0.4) !important;
+  opacity: 1 !important;
+}
+
+/* Button styles */
+::ng-deep .dialog-actions button.mat-mdc-button {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 6px;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .dialog-actions button.mat-mdc-button:not([color="primary"]) {
+  color: #666666;
+  border: 1px solid rgba(189, 155, 96, 0.4);
+}
+
+::ng-deep .dialog-actions button.mat-mdc-button:not([color="primary"]):hover {
+  background-color: rgba(189, 155, 96, 0.1);
+  border-color: rgba(189, 155, 96, 0.6);
+}
+
+::ng-deep .dialog-actions button.mat-mdc-raised-button[color="primary"] {
+  background: linear-gradient(135deg, #bd9b60 0%, #d7cba3 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(189, 155, 96, 0.3);
+}
+
+::ng-deep .dialog-actions button.mat-mdc-raised-button[color="primary"]:hover {
+  background: linear-gradient(135deg, #8a7147 0%, #bd9b60 100%) !important;
+  box-shadow: 0 6px 16px rgba(189, 155, 96, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Checkbox styling */
+::ng-deep .mat-mdc-checkbox .mdc-checkbox {
+  color: #bd9b60 !important;
+}
+
+::ng-deep .mat-mdc-checkbox .mdc-checkbox--selected .mdc-checkbox__native-control:enabled:checked ~ .mdc-checkbox__background {
+  background-color: #bd9b60 !important;
+  border-color: #bd9b60 !important;
+}
+
+/* Dropdown panel styles */
+::ng-deep .mat-mdc-select-panel {
+  background-color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+  color: #333333 !important;
+  background-color: #ffffff !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background-color: rgba(189, 155, 96, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: rgba(189, 155, 96, 0.2) !important;
+  color: #bd9b60 !important;
+}
+
+/* Custom scrollbar */
+.dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dialog-content::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.dialog-content::-webkit-scrollbar-thumb {
+  background-color: rgba(189, 155, 96, 0.5);
+  border-radius: 10px;
+}
+
+.dialog-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(189, 155, 96, 0.7);
+}
+
+/* Dialog container */
+::ng-deep .mat-mdc-dialog-container {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: #ffffff !important;
 }
 
 /* Responsive design */
@@ -79,98 +296,10 @@ h3:first-child {
   }
   
   h3 {
-    font-size: 16px;
+    font-size: 18px;
+  }
+
+  h2 {
+    font-size: 24px;
   }
 }
-
-/* Form field styling */
-mat-form-field {
-  margin-bottom: 8px;
-}
-
-mat-checkbox {
-  margin: 16px 0;
-  display: block;
-}
-
-/* Error styling */
-.mat-error {
-  color: #f44336;
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* Success styling */
-.mat-success {
-  color: #4caf50;
-}
-
-/* Loading state */
-.dialog-content.loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* Dialog content with scrolling and custom scrollbar */
-.dialog-content {
-  padding: 20px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-/* Custom thin, red scrollbar styling */
-.dialog-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dialog-content::-webkit-scrollbar-track {
-  background: #333; /* Track background */
-}
-
-.dialog-content::-webkit-scrollbar-thumb {
-  background-color: #ff1744; /* Red thumb */
-  border-radius: 10px;
-}
-
-.dialog-content::-webkit-scrollbar-thumb:hover {
-  background-color: #d50000; /* Darker red on hover */
-} 
-
-/* Dialog background */
-.mat-dialog-container {
-  background-color: #000000; /* Black background */
-  color: #ffffff; /* White font color */
-  border: 2px solid #ff1744; /* Red border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 16px;
-}
-
-/* Styling the form fields for readability on dark background */
-.mat-form-field {
-  color: #ffffff; /* Label and text color */
-}
-
-.mat-form-field label, .mat-form-field.mat-focused .mat-form-field-label {
-  color: #ffffff !important; /* Ensure the label stays white */
-}
-
-/* Custom button styles */
-.mat-raised-button {
-  background-color: #d50000; /* Red button */
-  color: #ffffff; /* White text */
-}
-
-.mat-raised-button:hover {
-  background-color: #b71c1c; /* Darker red on hover */
-}
-
-/* Adjust the cancel button for contrast */
-.dialog-actions button:not([color="primary"]) {
-  background-color: #555555; /* Dark gray for non-primary buttons */
-  color: #ffffff;
-}
-
-.dialog-actions button:not([color="primary"]):hover {
-  background-color: #333333; /* Darker gray on hover */
-}
-  

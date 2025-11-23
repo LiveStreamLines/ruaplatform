@@ -153,18 +153,61 @@ function getLastPicturesFromAllCameras(req, res) {
 
 // Controller for adding a new Camera
 function addCamera(req, res) {
-    const newCamera = req.body;
-    const addedCamera = cameraData.addItem(newCamera);
-    res.status(201).json(addedCamera);
+    try {
+        let newCamera = req.body;
+        
+        // Handle FormData: parse additionalProjects if it's a JSON string
+        if (req.body.additionalProjects && typeof req.body.additionalProjects === 'string') {
+            try {
+                newCamera.additionalProjects = JSON.parse(req.body.additionalProjects);
+            } catch (e) {
+                logger.warn('Failed to parse additionalProjects:', e);
+                newCamera.additionalProjects = [];
+            }
+        }
+        
+        // Ensure additionalProjects is an array
+        if (!Array.isArray(newCamera.additionalProjects)) {
+            newCamera.additionalProjects = [];
+        }
+        
+        const addedCamera = cameraData.addItem(newCamera);
+        res.status(201).json(addedCamera);
+    } catch (error) {
+        logger.error('Error adding camera:', error);
+        res.status(500).json({ message: 'Error adding camera', error: error.message });
+    }
 }
 
 // Controller for updating a Camera
 function updateCamera(req, res) {
-    const updatedCamera = cameraData.updateItem(req.params.id, req.body);
-    if (updatedCamera) {
-        res.json(updatedCamera);
-    } else {
-        res.status(404).json({ message: 'Camera not found' });
+    try {
+        let updateData = req.body;
+        
+        // Handle FormData: parse additionalProjects if it's a JSON string
+        if (req.body.additionalProjects && typeof req.body.additionalProjects === 'string') {
+            try {
+                updateData.additionalProjects = JSON.parse(req.body.additionalProjects);
+            } catch (e) {
+                logger.warn('Failed to parse additionalProjects:', e);
+                updateData.additionalProjects = [];
+            }
+        }
+        
+        // Ensure additionalProjects is an array if provided
+        if (updateData.additionalProjects !== undefined && !Array.isArray(updateData.additionalProjects)) {
+            updateData.additionalProjects = [];
+        }
+        
+        const updatedCamera = cameraData.updateItem(req.params.id, updateData);
+        if (updatedCamera) {
+            res.json(updatedCamera);
+        } else {
+            res.status(404).json({ message: 'Camera not found' });
+        }
+    } catch (error) {
+        logger.error('Error updating camera:', error);
+        res.status(500).json({ message: 'Error updating camera', error: error.message });
     }
 }
 

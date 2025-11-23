@@ -58,8 +58,8 @@ export class CameraComponent implements OnInit, AfterViewChecked {
 
   // Table data source for sorting and pagination
   dataSource = new MatTableDataSource<Camera>();
-  displayedColumns: string[] = ['name', 'country', 'serverFolder', 'createdDate', 'installedDate', 'status', 'blockUnblock', 'actions', 'download'];
-  allDevelopersDisplayedColumns: string[] = ['name', 'developer', 'project', 'country', 'serverFolder', 'createdDate', 'installedDate', 'status', 'blockUnblock', 'actions', 'download'];
+  displayedColumns: string[] = ['name', 'createdDate', 'actions'];
+  allDevelopersDisplayedColumns: string[] = ['name', 'developer', 'project', 'createdDate', 'actions'];
 
   constructor(
     private developerService: DeveloperService,
@@ -75,8 +75,6 @@ export class CameraComponent implements OnInit, AfterViewChecked {
       switch (property) {
         case 'createdDate': return new Date(item.createdDate).getTime();
         case 'name': return item.camera.toLowerCase();
-        case 'country': return item.country?.toLowerCase() || '';
-        case 'serverFolder': return item.serverFolder?.toLowerCase() || '';
         case 'developer': return this.getDeveloperName(item.developer)?.toLowerCase() || '';
         case 'project': return this.getProjectName(item.project)?.toLowerCase() || '';
         default: {
@@ -94,8 +92,6 @@ export class CameraComponent implements OnInit, AfterViewChecked {
       const searchStr = filter.toLowerCase();
       return !!(
         data.camera.toLowerCase().includes(searchStr) ||
-        (data.country && data.country.toLowerCase().includes(searchStr)) ||
-        (data.serverFolder && data.serverFolder.toLowerCase().includes(searchStr)) ||
         this.getDeveloperName(data.developer)?.toLowerCase().includes(searchStr) ||
         this.getProjectName(data.project)?.toLowerCase().includes(searchStr)
       );

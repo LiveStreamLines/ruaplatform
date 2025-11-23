@@ -46,39 +46,7 @@ export class DeveloperFormComponent implements OnInit {
   ngOnInit(): void {
     this.developerForm = this.fb.group({
       developerName: ['', Validators.required],
-      developerTag: ['', Validators.required],
-      description: ['', Validators.required],
-      isActive: [true],
-      // Contact Information
-      email: ['', [Validators.email]],
-      phone: [''],
-      website: [''],
-      // Business Information
-      vatNumber: [''],
-      taxId: [''],
-      businessLicense: [''],
-      // Address Information
-      address: this.fb.group({
-        street: [''],
-        city: [''],
-        state: [''],
-        zipCode: [''],
-        country: ['']
-      }),
-      // Contact Person
-      contactPerson: this.fb.group({
-        name: [''],
-        position: [''],
-        email: ['', [Validators.email]],
-        phone: ['']
-      }),
-      // Bank Details
-      bankDetails: this.fb.group({
-        bankName: [''],
-        accountNumber: [''],
-        iban: [''],
-        swiftCode: ['']
-      })
+      description: ['', Validators.required]
     });
     if (this.isEditMode && this.data.developer) {
       this.populateForm(this.data.developer);
@@ -88,36 +56,11 @@ export class DeveloperFormComponent implements OnInit {
   populateForm(developer: Developer): void {
     this.developerForm.patchValue({
       developerName: developer.developerName,
-      developerTag: developer.developerTag,
-      description: developer.description,
-      isActive: developer.isActive,
-      email: developer.email || '',
-      phone: developer.phone || '',
-      website: developer.website || '',
-      vatNumber: developer.vatNumber || '',
-      taxId: developer.taxId || '',
-      businessLicense: developer.businessLicense || '',
-      address: {
-        street: developer.address?.street || '',
-        city: developer.address?.city || '',
-        state: developer.address?.state || '',
-        zipCode: developer.address?.zipCode || '',
-        country: developer.address?.country || ''
-      },
-      contactPerson: {
-        name: developer.contactPerson?.name || '',
-        position: developer.contactPerson?.position || '',
-        email: developer.contactPerson?.email || '',
-        phone: developer.contactPerson?.phone || ''
-      },
-      bankDetails: {
-        bankName: developer.bankDetails?.bankName || '',
-        accountNumber: developer.bankDetails?.accountNumber || '',
-        iban: developer.bankDetails?.iban || '',
-        swiftCode: developer.bankDetails?.swiftCode || ''
-      }
+      description: developer.description || ''
     });
-    this.logoPreview = environment.backend + '/' + developer.logo; // Show the existing logo if editing
+    if (developer.logo) {
+      this.logoPreview = environment.backend + '/' + developer.logo; // Show the existing logo if editing
+    }
   }
 
   onLogoChange(event: Event): void {
@@ -145,43 +88,12 @@ export class DeveloperFormComponent implements OnInit {
       // Prepare FormData for the backend
       const formData = new FormData();
       formData.append('developerName', developerData.developerName);
-      formData.append('developerTag', developerData.developerTag);
       formData.append('description', developerData.description);
-      formData.append('isActive', developerData.isActive);
-      
-      // Contact Information
-      formData.append('email', developerData.email || '');
-      formData.append('phone', developerData.phone || '');
-      formData.append('website', developerData.website || '');
-      
-      // Business Information
-      formData.append('vatNumber', developerData.vatNumber || '');
-      formData.append('taxId', developerData.taxId || '');
-      formData.append('businessLicense', developerData.businessLicense || '');
-      
-      // Address Information
-      formData.append('address[street]', developerData.address?.street || '');
-      formData.append('address[city]', developerData.address?.city || '');
-      formData.append('address[state]', developerData.address?.state || '');
-      formData.append('address[zipCode]', developerData.address?.zipCode || '');
-      formData.append('address[country]', developerData.address?.country || '');
-      
-      // Contact Person
-      formData.append('contactPerson[name]', developerData.contactPerson?.name || '');
-      formData.append('contactPerson[position]', developerData.contactPerson?.position || '');
-      formData.append('contactPerson[email]', developerData.contactPerson?.email || '');
-      formData.append('contactPerson[phone]', developerData.contactPerson?.phone || '');
-      
-      // Bank Details
-      formData.append('bankDetails[bankName]', developerData.bankDetails?.bankName || '');
-      formData.append('bankDetails[accountNumber]', developerData.bankDetails?.accountNumber || '');
-      formData.append('bankDetails[iban]', developerData.bankDetails?.iban || '');
-      formData.append('bankDetails[swiftCode]', developerData.bankDetails?.swiftCode || '');
   
       // Append logo file if present
       if (this.logoFile) {
         formData.append('logo', this.logoFile);
-      } else if (this.isEditMode && this.data.developer.logo) {
+      } else if (this.isEditMode && this.data.developer?.logo) {
         // In edit mode, if no new logo is uploaded, keep the existing logo reference
         formData.append('logo', this.data.developer.logo);
       }

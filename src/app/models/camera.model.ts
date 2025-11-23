@@ -1,7 +1,7 @@
 export interface Camera {
     "_id": string,
-    "project": string,
-    "developer": string,
+    "project": string,  // Main project - path always uses this
+    "developer": string,  // Main developer - path always uses this
     "camera": string,
     "cameraId"?: string,
     "cameraDescription": string,
@@ -20,6 +20,8 @@ export interface Camera {
     "serverFolder": string,
     "createdDate": string,
     "blocked"?: boolean,
+    // Additional projects where this camera should also appear
+    "additionalProjects"?: string[],  // Array of project IDs
     // New fields for sales order integration
     "projectTag"?: string,
     "developerTag"?: string,

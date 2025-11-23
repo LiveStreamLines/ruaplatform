@@ -27,5 +27,20 @@
       <mat-icon>people</mat-icon>
       <span>Users</span>
     </a>
+    
+    <a *ngIf="isSuper$ | async" mat-list-item routerLink="/developers" routerLinkActive="active" class="nav-item">
+      <mat-icon>business</mat-icon>
+      <span>Developers</span>
+    </a>
+    
+    <a *ngIf="isSuper$ | async" mat-list-item routerLink="/projects" routerLinkActive="active" class="nav-item">
+      <mat-icon>folder</mat-icon>
+      <span>Projects</span>
+    </a>
+    
+    <a *ngIf="isSuper$ | async" mat-list-item routerLink="/cameras" routerLinkActive="active" class="nav-item">
+      <mat-icon>videocam</mat-icon>
+      <span>Cameras</span>
+    </a>
   </mat-nav-list>
 </div>
