@@ -178,6 +178,35 @@ export class AppComponent {
             },
             error: (error) => {
               console.error('[AppComponent] SSO login error:', error);
+              console.error('[AppComponent] Error details:', {
+                status: error.status,
+                statusText: error.statusText,
+                message: error.message,
+                error: error.error
+              });
+              
+              // Extract error message from backend
+              let errorMessage = 'Access denied. Your account is not authorized.';
+              if (error.error) {
+                if (typeof error.error === 'string') {
+                  try {
+                    const parsed = JSON.parse(error.error);
+                    errorMessage = parsed.msg || errorMessage;
+                  } catch {
+                    errorMessage = error.error;
+                  }
+                } else if (error.error.msg) {
+                  errorMessage = error.error.msg;
+                } else if (error.error.message) {
+                  errorMessage = error.error.message;
+                }
+              }
+              
+              console.error('[AppComponent] Error message:', errorMessage);
+              
+              // Store error message in sessionStorage so login component can display it
+              sessionStorage.setItem('ssoLoginError', errorMessage);
+              
               // If login fails, redirect to login page
               this.router.navigate(['/login'], { replaceUrl: true });
               reject(error);

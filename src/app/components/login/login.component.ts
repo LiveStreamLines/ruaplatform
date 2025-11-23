@@ -38,6 +38,14 @@ export class LoginComponent implements OnInit {
       console.log('[LoginComponent] URL hash:', window.location.hash);
       
       this.headerService.showHeaderAndSidenav = false;
+      
+      // Check for error message from SSO login attempt
+      const ssoError = sessionStorage.getItem('ssoLoginError');
+      if (ssoError) {
+        this.loginError = ssoError;
+        sessionStorage.removeItem('ssoLoginError');
+        console.log('[LoginComponent] Displaying SSO error:', ssoError);
+      }
 
       // Ensure MSAL is initialized before using it
       // Initialize is idempotent, safe to call multiple times
@@ -224,15 +232,40 @@ export class LoginComponent implements OnInit {
             message: error.message,
             error: error.error
           });
-          this.loginError = error.error?.msg || error.message || 'Access denied. Your account is not authorized.';
+          
+          // Extract error message from backend response
+          let errorMessage = 'Access denied. Your account is not authorized.';
+          if (error.error) {
+            if (typeof error.error === 'string') {
+              try {
+                const parsed = JSON.parse(error.error);
+                errorMessage = parsed.msg || errorMessage;
+              } catch {
+                errorMessage = error.error;
+              }
+            } else if (error.error.msg) {
+              errorMessage = error.error.msg;
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            }
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
+          console.error('Displaying error message:', errorMessage);
+          this.loginError = errorMessage;
           this.isSSOLoading = false;
+          
           // Logout from Microsoft if user is not in users list
-          this.msalService.logoutPopup().subscribe({
+          // Use logoutRedirect instead of logoutPopup to avoid popup blocking issues
+          this.msalService.logoutRedirect().subscribe({
             next: () => {
-              console.log('Logged out from Microsoft');
+              console.log('Redirecting to logout from Microsoft');
             },
             error: (logoutError) => {
               console.error('MSAL logout error:', logoutError);
+              // If logout fails, at least clear local state
+              this.msalInstance.clearCache();
             }
           });
           reject(error);
