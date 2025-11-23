@@ -53,6 +53,10 @@ export class AppComponent {
       hash: window.location.hash
     });
     
+    // CRITICAL: Check if we have a hash with code BEFORE initializing MSAL
+    const hasCodeInHash = window.location.hash.includes('code=');
+    console.log('[AppComponent] Has code in hash?', hasCodeInHash);
+    
     // Initialize MSAL before using it
     // Initialize is idempotent, safe to call multiple times
     console.log('[AppComponent] Initializing MSAL...');
@@ -74,10 +78,12 @@ export class AppComponent {
       console.error('[AppComponent] MSAL initialization error:', error);
     }
 
-    // Handle MSAL redirect at app level (before routing)
+    // Handle MSAL redirect IMMEDIATELY after initialization (before any routing)
     console.log('[AppComponent] About to handle MSAL redirect...');
+    console.log('[AppComponent] Hash before handleRedirectPromise:', window.location.hash);
     await this.handleMSALRedirect();
     console.log('[AppComponent] MSAL redirect handling completed');
+    console.log('[AppComponent] Hash after handleRedirectPromise:', window.location.hash);
 
     this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet])
       .subscribe(result => {
@@ -104,7 +110,8 @@ export class AppComponent {
       
       // Check URL for MSAL redirect indicators
       const urlParams = new URLSearchParams(window.location.search);
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const hashString = window.location.hash.substring(1); // Remove the #
+      const hashParams = new URLSearchParams(hashString);
       
       // Convert URLSearchParams to object for logging
       const urlParamsObj: { [key: string]: string } = {};
@@ -119,9 +126,12 @@ export class AppComponent {
       
       console.log('[AppComponent] URL search params:', urlParamsObj);
       console.log('[AppComponent] URL hash params:', hashParamsObj);
+      console.log('[AppComponent] Hash string length:', hashString.length);
       console.log('[AppComponent] Has code param?', urlParams.has('code') || hashParams.has('code'));
       console.log('[AppComponent] Has error param?', urlParams.has('error') || hashParams.has('error'));
       
+      // CRITICAL: handleRedirectPromise must be called while the hash is still in the URL
+      console.log('[AppComponent] Calling handleRedirectPromise NOW with hash:', window.location.hash.substring(0, 100) + '...');
       const response = await this.msalInstance.handleRedirectPromise();
       console.log('[AppComponent] handleRedirectPromise response:', response);
       console.log('[AppComponent] Response type:', typeof response);
