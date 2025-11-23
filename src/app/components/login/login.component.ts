@@ -40,43 +40,70 @@ export class LoginComponent implements OnInit {
         // If already initialized, this will fail silently
       });
 
-      // Check if already logged in
+      // First, check if returning from SSO redirect (this must happen before checking isLoggedIn)
+      const isProcessingRedirect = await this.handleSSORedirect();
+      
+      // If we're processing a redirect, don't check isLoggedIn yet (it will be set after SSO completes)
+      if (isProcessingRedirect) {
+        console.log('Processing redirect, waiting for login to complete...');
+        return;
+      }
+
+      // Check if already logged in (only if not processing redirect)
+      // Add a small delay to ensure any async operations complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       if (this.authService.isLoggedIn()) {
-        this.router.navigate(['/home']);
+        console.log('User is already logged in, redirecting to home...');
+        this.router.navigate(['/home'], { replaceUrl: true });
         this.headerService.showHeaderAndSidenav = true;
         return;
       }
-
-      // Check if returning from SSO redirect
-      this.handleSSORedirect();
+      
+      console.log('User is not logged in, showing login page');
     }
 
   // Handle SSO redirect callback
-  private async handleSSORedirect(): Promise<void> {
+  // Returns true if we're processing a redirect, false otherwise
+  private async handleSSORedirect(): Promise<boolean> {
     try {
+      console.log('Checking for SSO redirect...');
       // Handle redirect promise first
       const response = await this.msalInstance.handleRedirectPromise();
+      console.log('handleRedirectPromise response:', response);
       
       if (response && response.account) {
         // User just completed redirect login
+        console.log('SSO redirect detected, processing login for:', response.account.username);
+        this.isSSOLoading = true;
         const email = response.account.username;
         const name = response.account.name;
-        this.processSSOLogin(email, name);
-        return;
+        await this.processSSOLogin(email, name);
+        return true;
       }
 
-      // Check if user is already authenticated
+      // Check if user is already authenticated via MSAL but not in our system
       const accounts = this.msalInstance.getAllAccounts();
-      if (accounts.length > 0) {
-        // User is already authenticated via SSO, get account info
+      console.log('MSAL accounts found:', accounts.length);
+      console.log('Is logged in to our system:', this.authService.isLoggedIn());
+      
+      if (accounts.length > 0 && !this.authService.isLoggedIn()) {
+        // User is authenticated via MSAL but not in our backend yet
         const account = accounts[0];
+        console.log('MSAL account found but not logged in to backend, processing login for:', account.username);
         if (account.username) {
-          this.processSSOLogin(account.username, account.name || undefined);
+          this.isSSOLoading = true;
+          await this.processSSOLogin(account.username, account.name || undefined);
+          return true;
         }
       }
     } catch (error) {
       console.error('Error handling SSO redirect:', error);
+      this.isSSOLoading = false;
+      this.loginError = 'Error processing Microsoft login. Please try again.';
     }
+    
+    return false;
   }
 
   // SSO Login with Microsoft
@@ -116,29 +143,78 @@ export class LoginComponent implements OnInit {
   }
 
   // Process SSO login - verify user against users list
-  private processSSOLogin(email: string, name?: string): void {
-    this.authService.ssoLogin(email, name).subscribe({
-      next: (response) => {
-        if (response && response.authh) {
-          this.router.navigate(['/home']);
-          this.headerService.showHeaderAndSidenav = true;
-          this.isSSOLoading = false;
-        }
-      },
-      error: (error) => {
-        console.error('SSO verification error:', error);
-        this.loginError = error.error?.msg || 'Access denied. Your account is not authorized.';
-        this.isSSOLoading = false;
-        // Logout from Microsoft if user is not in users list
-        this.msalService.logoutPopup().subscribe({
-          next: () => {
-            console.log('Logged out from Microsoft');
-          },
-          error: (logoutError) => {
-            console.error('MSAL logout error:', logoutError);
+  private async processSSOLogin(email: string, name?: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      console.log('Processing SSO login for:', email);
+      this.authService.ssoLogin(email, name).subscribe({
+        next: (response) => {
+          console.log('SSO login response:', response);
+          if (response && response.authh) {
+            console.log('SSO login successful, auth token received');
+            console.log('Auth token set:', !!this.authService.getAuthToken());
+            console.log('Is logged in check:', this.authService.isLoggedIn());
+            console.log('Navigating to /home...');
+            
+            // Ensure header is shown
+            this.headerService.showHeaderAndSidenav = true;
+            this.isSSOLoading = false;
+            
+            // Wait a moment to ensure token is fully saved to localStorage
+            setTimeout(() => {
+              // Verify token is saved before navigation
+              const tokenSaved = !!localStorage.getItem('authToken');
+              console.log('Token saved to localStorage:', tokenSaved);
+              
+              if (tokenSaved) {
+                // Use window.location for a full page reload to ensure AuthGuard sees the token
+                console.log('Using window.location for navigation...');
+                window.location.href = '/home';
+                resolve();
+              } else {
+                // If token not saved, try router navigation as fallback
+                console.log('Token not saved yet, trying router navigation...');
+                this.router.navigate(['/home'], { replaceUrl: true }).then((success) => {
+                  console.log('Router navigation result:', success);
+                  if (!success) {
+                    window.location.href = '/home';
+                  }
+                  resolve();
+                }).catch((err) => {
+                  console.error('Navigation error:', err);
+                  window.location.href = '/home';
+                  resolve();
+                });
+              }
+            }, 200);
+          } else {
+            console.error('SSO login failed: No auth token in response', response);
+            this.loginError = 'Login failed. Please try again.';
+            this.isSSOLoading = false;
+            resolve();
           }
-        });
-      }
+        },
+        error: (error) => {
+          console.error('SSO verification error:', error);
+          console.error('Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            error: error.error
+          });
+          this.loginError = error.error?.msg || error.message || 'Access denied. Your account is not authorized.';
+          this.isSSOLoading = false;
+          // Logout from Microsoft if user is not in users list
+          this.msalService.logoutPopup().subscribe({
+            next: () => {
+              console.log('Logged out from Microsoft');
+            },
+            error: (logoutError) => {
+              console.error('MSAL logout error:', logoutError);
+            }
+          });
+          reject(error);
+        }
+      });
     });
   }
 
