@@ -62,15 +62,15 @@ export const routes: Routes = [
   { path: 'home/:developerTag/:projectTag/:cameraName', component: CameraDetailComponent,  canActivate: [AuthGuard] },  // Route for camera detail
   { path: 'compare', component: CameraCompareComponent,  canActivate: [AuthGuard] },
   { path: 'developers', component: DevelopersComponent,  
-    canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} },
+    canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
   { path: 'projects', component: ProjectsComponent,  
-    canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} },
+    canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
   { path: 'cameras', component: CameraComponent,  
-    canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} },
+    canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
   { path: 'camera-form', component: CameraFormComponent,  
-    canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} }, // Route for adding a new camera
+    canActivate: [AuthGuard], data: {roles: ['Super Admin']} }, // Route for adding a new camera
   { path: 'camera-form/:id', component: CameraFormComponent,  
-    canActivate: [AuthGuard], data: {roles: ['Super Admin', 'Admin']} }, // Route for editing a camera by ID
+    canActivate: [AuthGuard], data: {roles: ['Super Admin']} }, // Route for editing a camera by ID
   { path: 'users', component: UsersComponent,  canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
   { path: 'users/add', component: UserFormComponent,  canActivate: [AuthGuard], data: {roles: ['Super Admin']} },
   { path: 'users/edit/:id', component: UserFormComponent,  canActivate: [AuthGuard], data: {roles: ['Super Admin']} }, // Route for editing
