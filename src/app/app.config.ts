@@ -62,42 +62,34 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   };
 }
 
-// APP_INITIALIZER to handle MSAL redirect BEFORE routing
+// APP_INITIALIZER to check for stored redirect account and process login
 export function initializeMSALRedirect(): () => Promise<void> {
   return async () => {
-    console.log('[APP_INITIALIZER] ====== STARTING MSAL REDIRECT INIT ======');
-    console.log('[APP_INITIALIZER] Current URL:', window.location.href);
-    console.log('[APP_INITIALIZER] Hash:', window.location.hash);
+    console.log('[APP_INITIALIZER] ====== CHECKING FOR STORED REDIRECT ======');
     
     try {
-      // Get MSAL instance from injector
-      const msalInstance = inject(MSAL_INSTANCE) as unknown as IPublicClientApplication;
-      const authService = inject(AuthService);
-      const headerService = inject(HeaderService);
-      const router = inject(Router);
-      
-      // Initialize MSAL
-      console.log('[APP_INITIALIZER] Initializing MSAL...');
-      await msalInstance.initialize();
-      console.log('[APP_INITIALIZER] MSAL initialized');
-      
-      // Process redirect IMMEDIATELY while hash is still in URL
-      console.log('[APP_INITIALIZER] Processing redirect with hash:', window.location.hash.substring(0, 100));
-      const response = await msalInstance.handleRedirectPromise();
-      console.log('[APP_INITIALIZER] handleRedirectPromise response:', response);
-      
-      if (response && response.account) {
-        console.log('[APP_INITIALIZER] Redirect detected! Processing login for:', response.account.username);
-        const email = response.account.username;
-        const name = response.account.name;
+      // Check if we have account info stored from main.ts
+      const storedAccount = sessionStorage.getItem('msal_redirect_account');
+      if (storedAccount) {
+        console.log('[APP_INITIALIZER] Found stored account info');
+        const accountInfo = JSON.parse(storedAccount);
+        console.log('[APP_INITIALIZER] Account:', accountInfo);
+        
+        // Get services from injector
+        const authService = inject(AuthService);
+        const headerService = inject(HeaderService);
+        const router = inject(Router);
         
         // Process SSO login
         return new Promise<void>((resolve) => {
-          authService.ssoLogin(email, name).subscribe({
+          console.log('[APP_INITIALIZER] Processing SSO login for:', accountInfo.email);
+          authService.ssoLogin(accountInfo.email, accountInfo.name).subscribe({
             next: (authResponse: any) => {
               console.log('[APP_INITIALIZER] SSO login successful');
               if (authResponse && authResponse.authh) {
                 headerService.showHeaderAndSidenav = true;
+                // Clear stored account
+                sessionStorage.removeItem('msal_redirect_account');
                 // Wait for token to be saved
                 setTimeout(() => {
                   console.log('[APP_INITIALIZER] Navigating to /home');
@@ -110,23 +102,25 @@ export function initializeMSALRedirect(): () => Promise<void> {
                 }, 200);
               } else {
                 console.log('[APP_INITIALIZER] No auth token, will redirect to login');
+                sessionStorage.removeItem('msal_redirect_account');
                 resolve();
               }
             },
             error: (error: any) => {
               console.error('[APP_INITIALIZER] SSO login error:', error);
+              sessionStorage.removeItem('msal_redirect_account');
               resolve(); // Continue app initialization even on error
             }
           });
         });
       } else {
-        console.log('[APP_INITIALIZER] No redirect response');
+        console.log('[APP_INITIALIZER] No stored account info');
       }
     } catch (error) {
       console.error('[APP_INITIALIZER] Error:', error);
     }
     
-    console.log('[APP_INITIALIZER] ====== FINISHED MSAL REDIRECT INIT ======');
+    console.log('[APP_INITIALIZER] ====== FINISHED CHECKING ======');
   };
 }
 
