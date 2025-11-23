@@ -40,37 +40,38 @@ export class LoginComponent implements OnInit {
         // If already initialized, this will fail silently
       });
 
-      // First, check if returning from SSO redirect (this must happen before checking isLoggedIn)
+      // Note: MSAL redirect is handled at app level (app.component.ts)
+      // This is a fallback check in case redirect wasn't handled yet
       const isProcessingRedirect = await this.handleSSORedirect();
       
       // If we're processing a redirect, don't check isLoggedIn yet (it will be set after SSO completes)
       if (isProcessingRedirect) {
-        console.log('Processing redirect, waiting for login to complete...');
+        console.log('[LoginComponent] Processing redirect, waiting for login to complete...');
         return;
       }
 
       // Check if already logged in (only if not processing redirect)
       // Add a small delay to ensure any async operations complete
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       if (this.authService.isLoggedIn()) {
-        console.log('User is already logged in, redirecting to home...');
+        console.log('[LoginComponent] User is already logged in, redirecting to home...');
         this.router.navigate(['/home'], { replaceUrl: true });
         this.headerService.showHeaderAndSidenav = true;
         return;
       }
       
-      console.log('User is not logged in, showing login page');
+      console.log('[LoginComponent] User is not logged in, showing login page');
     }
 
-  // Handle SSO redirect callback
+  // Handle SSO redirect callback (fallback - main handling is in app.component.ts)
   // Returns true if we're processing a redirect, false otherwise
   private async handleSSORedirect(): Promise<boolean> {
     try {
-      console.log('Checking for SSO redirect...');
-      // Handle redirect promise first
+      console.log('[LoginComponent] Checking for SSO redirect (fallback)...');
+      // Handle redirect promise first (may return null if already handled by app component)
       const response = await this.msalInstance.handleRedirectPromise();
-      console.log('handleRedirectPromise response:', response);
+      console.log('[LoginComponent] handleRedirectPromise response:', response);
       
       if (response && response.account) {
         // User just completed redirect login
