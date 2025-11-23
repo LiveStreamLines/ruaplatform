@@ -1,23 +1,21 @@
 <div class="camera-form-container">
-  <h2>{{ isEditing ? 'Add New Camera' : 'Edit Camera' }}</h2>
+  <h2>{{ isEditing ? 'Edit Camera' : 'Add New Camera' }}</h2>
 
   <form [formGroup]="cameraForm" (ngSubmit)="onSubmit()">
-    <!-- Developer and Project Selection -->
-    <div class="row">
+    <!-- Developer and Project Selection (only shown when adding new camera) -->
+    <div class="row" *ngIf="!isEditing">
       <div class="col">
         <label>Developer:</label>
-        <select formControlName="developer" (change)="onDeveloperChange($event)" *ngIf="!isEditing">
+        <select formControlName="developer" (change)="onDeveloperChange($event)">
           <option *ngFor="let dev of developers" [value]="dev._id">{{ dev.developerName }}</option>
         </select>
-        <input type="text" *ngIf="isEditing" [value]="selectedDeveloper.developerName" disabled />
       </div>
 
       <div class="col">
         <label>Project:</label>
-        <select formControlName="project" *ngIf="!isEditing">
+        <select formControlName="project">
           <option *ngFor="let proj of filteredProjects" [value]="proj._id">{{ proj.projectName }}</option>
         </select>
-        <input type="text" *ngIf="isEditing" [value]="selectedProject.projectName" disabled />
       </div>
     </div>
 
@@ -48,7 +46,20 @@
     </div>
 
     <!-- Additional Projects Selection -->
-    <div class="row">
+    <div class="row" *ngIf="isEditing">
+      <div class="col full-width-col">
+        <label>Additional Projects (Camera will also appear in these projects):</label>
+        <select formControlName="additionalProjects" multiple class="multi-select" size="5">
+          <option *ngFor="let proj of availableProjectsForSelection" [value]="proj._id">
+            {{ proj.projectName }}
+          </option>
+        </select>
+        <small class="hint-text">Hold Ctrl (Windows) or Cmd (Mac) to select multiple projects. The main project is already assigned by default.</small>
+      </div>
+    </div>
+
+    <!-- Additional Projects Selection (for Add mode) -->
+    <div class="row" *ngIf="!isEditing">
       <div class="col full-width-col">
         <label>Additional Projects (Camera will also appear in these projects):</label>
         <select formControlName="additionalProjects" multiple class="multi-select" size="5">
@@ -56,14 +67,14 @@
             {{ proj.projectName }} {{ proj._id === cameraForm.get('project')?.value ? '(Main Project)' : '' }}
           </option>
         </select>
-        <small class="hint-text">Hold Ctrl (Windows) or Cmd (Mac) to select multiple projects. The main project is excluded.</small>
+        <small class="hint-text">Hold Ctrl (Windows) or Cmd (Mac) to select multiple projects. The main project is automatically included.</small>
       </div>
     </div>
 
     <div class="form-actions">
       <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
       <button type="submit" [disabled]="cameraForm.invalid">
-        {{ isEditing ? 'Add Camera' : 'Update Camera' }}
+        {{ isEditing ? 'Update Camera' : 'Add Camera' }}
       </button>
     </div>
   </form>

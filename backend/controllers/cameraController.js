@@ -156,14 +156,20 @@ function addCamera(req, res) {
     try {
         let newCamera = req.body;
         
-        // Handle FormData: parse additionalProjects if it's a JSON string
-        if (req.body.additionalProjects && typeof req.body.additionalProjects === 'string') {
-            try {
-                newCamera.additionalProjects = JSON.parse(req.body.additionalProjects);
-            } catch (e) {
-                logger.warn('Failed to parse additionalProjects:', e);
-                newCamera.additionalProjects = [];
+        logger.info('Adding camera with data:', JSON.stringify(newCamera));
+        
+        // Handle additionalProjects: ensure it's an array
+        if (newCamera.additionalProjects) {
+            if (typeof newCamera.additionalProjects === 'string') {
+                try {
+                    newCamera.additionalProjects = JSON.parse(newCamera.additionalProjects);
+                } catch (e) {
+                    logger.warn('Failed to parse additionalProjects:', e);
+                    newCamera.additionalProjects = [];
+                }
             }
+        } else {
+            newCamera.additionalProjects = [];
         }
         
         // Ensure additionalProjects is an array
@@ -171,7 +177,10 @@ function addCamera(req, res) {
             newCamera.additionalProjects = [];
         }
         
+        logger.info('Camera additionalProjects:', newCamera.additionalProjects);
+        
         const addedCamera = cameraData.addItem(newCamera);
+        logger.info('Camera added successfully with ID:', addedCamera._id);
         res.status(201).json(addedCamera);
     } catch (error) {
         logger.error('Error adding camera:', error);
@@ -184,23 +193,37 @@ function updateCamera(req, res) {
     try {
         let updateData = req.body;
         
-        // Handle FormData: parse additionalProjects if it's a JSON string
-        if (req.body.additionalProjects && typeof req.body.additionalProjects === 'string') {
-            try {
-                updateData.additionalProjects = JSON.parse(req.body.additionalProjects);
-            } catch (e) {
-                logger.warn('Failed to parse additionalProjects:', e);
+        logger.info('Updating camera with data:', JSON.stringify(updateData));
+        
+        // Handle additionalProjects: ensure it's an array
+        if (updateData.additionalProjects !== undefined) {
+            if (typeof updateData.additionalProjects === 'string') {
+                try {
+                    updateData.additionalProjects = JSON.parse(updateData.additionalProjects);
+                } catch (e) {
+                    logger.warn('Failed to parse additionalProjects:', e);
+                    updateData.additionalProjects = [];
+                }
+            }
+            // Ensure it's an array
+            if (!Array.isArray(updateData.additionalProjects)) {
+                updateData.additionalProjects = [];
+            }
+        } else {
+            // If not provided, keep existing or set to empty array
+            const existingCamera = cameraData.getItemById(req.params.id);
+            if (existingCamera && existingCamera.additionalProjects) {
+                updateData.additionalProjects = existingCamera.additionalProjects;
+            } else {
                 updateData.additionalProjects = [];
             }
         }
         
-        // Ensure additionalProjects is an array if provided
-        if (updateData.additionalProjects !== undefined && !Array.isArray(updateData.additionalProjects)) {
-            updateData.additionalProjects = [];
-        }
+        logger.info('Camera additionalProjects:', updateData.additionalProjects);
         
         const updatedCamera = cameraData.updateItem(req.params.id, updateData);
         if (updatedCamera) {
+            logger.info('Camera updated successfully');
             res.json(updatedCamera);
         } else {
             res.status(404).json({ message: 'Camera not found' });

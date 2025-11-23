@@ -23,6 +23,7 @@ export class CameraFormComponent implements OnInit {
   projects: Project[] = [];
   filteredProjects: Project[] = [];
   allAvailableProjects: Project[] = [];  // All projects for additional projects selection
+  availableProjectsForSelection: Project[] = [];  // Projects available for selection (excludes main project in edit mode)
   selectedDeveloper!: Developer;
   selectedProject!: Project;
   isEditing = false;
@@ -73,14 +74,21 @@ export class CameraFormComponent implements OnInit {
 
       const cameraId = this.route.snapshot.paramMap.get('id');
       if (cameraId) {
-        this.isEditing = false;  // Editing existing camera
+        this.isEditing = true;  // Editing existing camera
         this.cameraService.getCameraById(cameraId).subscribe(camera => {
           this.developerService.getDeveloperById(camera.developer).subscribe(developer => {
             this.selectedDeveloper = developer;
+            this.cameraForm.patchValue({ developer: developer._id });
           });
           this.projectService.getProjectById(camera.project).subscribe(project => {
             this.selectedProject = project;
+            this.cameraForm.patchValue({ project: project._id });
+            
+            // Filter out the main project from available projects for selection
+            this.updateAvailableProjectsForSelection(project._id);
           });
+          
+          // Only show additional projects in the multi-select (not the main project)
           this.cameraForm.patchValue({
             ...camera,
             additionalProjects: camera.additionalProjects || []
@@ -108,7 +116,20 @@ export class CameraFormComponent implements OnInit {
   loadAllProjects(): void {
     this.projectService.getAllProjects().subscribe(projects => {
       this.allAvailableProjects = projects;
+      // If editing and we have a main project, filter it out
+      if (this.isEditing && this.selectedProject) {
+        this.updateAvailableProjectsForSelection(this.selectedProject._id);
+      } else {
+        this.availableProjectsForSelection = projects;
+      }
     });
+  }
+
+  updateAvailableProjectsForSelection(mainProjectId: string): void {
+    // Filter out the main project from available projects
+    this.availableProjectsForSelection = this.allAvailableProjects.filter(
+      proj => proj._id !== mainProjectId
+    );
   }
 
   onDeveloperChange(event: Event): void {
@@ -120,23 +141,35 @@ export class CameraFormComponent implements OnInit {
     if (this.cameraForm.valid) {
       const formValue = this.cameraForm.value;
       
-      // Ensure additionalProjects is an array and exclude the main project
-      const mainProjectId = formValue.project;
-      let additionalProjects: string[] = [];
-      
-      // Handle multi-select: it can be a string (single value) or array
+      // Get selected projects from multi-select
+      let selectedProjects: string[] = [];
       if (formValue.additionalProjects) {
         if (Array.isArray(formValue.additionalProjects)) {
-          additionalProjects = formValue.additionalProjects.filter((id: string) => id && id !== mainProjectId);
-        } else if (typeof formValue.additionalProjects === 'string' && formValue.additionalProjects !== mainProjectId) {
-          additionalProjects = [formValue.additionalProjects];
+          selectedProjects = formValue.additionalProjects.filter((id: string) => id);
+        } else if (typeof formValue.additionalProjects === 'string') {
+          selectedProjects = [formValue.additionalProjects];
         }
+      }
+      
+      // Determine main project and additional projects
+      let mainProjectId: string;
+      let additionalProjects: string[] = [];
+      
+      if (this.isEditing) {
+        // In edit mode: keep the original main project, selected projects are additional
+        mainProjectId = formValue.project;  // Keep the original main project
+        additionalProjects = selectedProjects.filter((id: string) => id && id !== mainProjectId);
+      } else {
+        // In add mode: use the selected project as main, others as additional
+        mainProjectId = formValue.project;
+        // Exclude main project from additional projects
+        additionalProjects = selectedProjects.filter((id: string) => id && id !== mainProjectId);
       }
       
       // Prepare camera data as JSON object
       const cameraData: any = {
         developer: formValue.developer,
-        project: formValue.project,
+        project: mainProjectId,
         cameraDescription: formValue.cameraDescription || '',
         lat: formValue.lat,
         lng: formValue.lng,
@@ -146,36 +179,36 @@ export class CameraFormComponent implements OnInit {
       // Add additionalProjects if any
       if (additionalProjects.length > 0) {
         cameraData.additionalProjects = additionalProjects;
+      } else {
+        // Ensure additionalProjects is an empty array if none
+        cameraData.additionalProjects = [];
       }
 
       const cameraId = this.route.snapshot.paramMap.get('id');
+      console.log('Submitting camera data:', cameraData);
       if (cameraId) {
-        // Editing existing camera - convert to FormData
-        const formData = new FormData();
-        Object.keys(cameraData).forEach(key => {
-          if (key === 'additionalProjects') {
-            formData.append(key, JSON.stringify(cameraData[key]));
-          } else {
-            formData.append(key, cameraData[key]);
+        // Editing existing camera - send as JSON using updateCamera
+        this.cameraService.updateCamera(cameraId, cameraData).subscribe({
+          next: (response) => {
+            console.log('Camera updated successfully:', response);
+            this.router.navigate(['/cameras']);
+          },
+          error: (error) => {
+            console.error('Error updating camera:', error);
+            console.error('Error details:', error.error);
           }
-        });
-        this.cameraService.updateCamera(cameraId, formData).subscribe({
-          next: () => this.router.navigate(['/cameras']),
-          error: (error) => console.error('Error updating camera:', error)
         });
       } else {
-        // Adding new camera - convert to FormData
-        const formData = new FormData();
-        Object.keys(cameraData).forEach(key => {
-          if (key === 'additionalProjects') {
-            formData.append(key, JSON.stringify(cameraData[key]));
-          } else {
-            formData.append(key, cameraData[key]);
+        // Adding new camera - send as JSON
+        this.cameraService.addCamera(cameraData).subscribe({
+          next: (response) => {
+            console.log('Camera added successfully:', response);
+            this.router.navigate(['/cameras']);
+          },
+          error: (error) => {
+            console.error('Error adding camera:', error);
+            console.error('Error details:', error.error);
           }
-        });
-        this.cameraService.addCamera(formData).subscribe({
-          next: () => this.router.navigate(['/cameras']),
-          error: (error) => console.error('Error adding camera:', error)
         });
       }
     }

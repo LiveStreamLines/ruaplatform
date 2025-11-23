@@ -122,20 +122,43 @@ export class CameraService {
     }
   }
 
-  addCamera(formData: FormData){
+  addCamera(data: any){
     const authh = this.authService.getAuthToken(); 
     const headers = new HttpHeaders({ 
-      'Authorization': authh ? `Bearer ${authh}` : ''  // Send authh header
+      'Authorization': authh ? `Bearer ${authh}` : '',  // Send authh header
+      'Content-Type': 'application/json'
     });
-    return this.http.post(`${this.apiUrl}/`, formData, { headers });
+    // If data is a string, parse it; otherwise use as-is
+    const body = typeof data === 'string' ? JSON.parse(data) : data;
+    return this.http.post(`${this.apiUrl}/`, body, { headers });
   }
 
-  updateCamera(cameraId: any, formData: FormData){
+  updateCamera(cameraId: any, data: any){
     const authh = this.authService.getAuthToken(); 
     const headers = new HttpHeaders({ 
-      'Authorization': authh ? `Bearer ${authh}` : ''  // Send authh header
+      'Authorization': authh ? `Bearer ${authh}` : '',  // Send authh header
+      'Content-Type': 'application/json'
     });
-    return this.http.put(`${this.apiUrl}/${cameraId}`, formData, { headers });
+    // If data is FormData, convert to JSON; otherwise use as-is
+    let body: any;
+    if (data instanceof FormData) {
+      // Convert FormData to object (for backward compatibility)
+      body = {};
+      data.forEach((value, key) => {
+        if (key === 'additionalProjects') {
+          try {
+            body[key] = JSON.parse(value as string);
+          } catch {
+            body[key] = [];
+          }
+        } else {
+          body[key] = value;
+        }
+      });
+    } else {
+      body = data;
+    }
+    return this.http.put(`${this.apiUrl}/${cameraId}`, body, { headers });
   }
 
   updateCameraStatus(cameraId: string, data: any): Observable<any> {
