@@ -32,17 +32,28 @@ export class LoginComponent implements OnInit {
   ) {}
 
     async ngOnInit(): Promise<void> {
+      console.log('[LoginComponent] ====== LOGIN COMPONENT INIT ======');
+      console.log('[LoginComponent] Current URL:', window.location.href);
+      console.log('[LoginComponent] URL search:', window.location.search);
+      console.log('[LoginComponent] URL hash:', window.location.hash);
+      
       this.headerService.showHeaderAndSidenav = false;
 
       // Ensure MSAL is initialized before using it
       // Initialize is idempotent, safe to call multiple times
-      await this.msalInstance.initialize().catch(() => {
-        // If already initialized, this will fail silently
-      });
+      console.log('[LoginComponent] Initializing MSAL...');
+      try {
+        await this.msalInstance.initialize();
+        console.log('[LoginComponent] MSAL initialized');
+      } catch (error) {
+        console.error('[LoginComponent] MSAL init error:', error);
+      }
 
       // Note: MSAL redirect is handled at app level (app.component.ts)
       // This is a fallback check in case redirect wasn't handled yet
+      console.log('[LoginComponent] Checking for redirect (fallback)...');
       const isProcessingRedirect = await this.handleSSORedirect();
+      console.log('[LoginComponent] Is processing redirect?', isProcessingRedirect);
       
       // If we're processing a redirect, don't check isLoggedIn yet (it will be set after SSO completes)
       if (isProcessingRedirect) {
@@ -52,9 +63,19 @@ export class LoginComponent implements OnInit {
 
       // Check if already logged in (only if not processing redirect)
       // Add a small delay to ensure any async operations complete
+      console.log('[LoginComponent] Waiting 200ms before checking login status...');
       await new Promise(resolve => setTimeout(resolve, 200));
       
-      if (this.authService.isLoggedIn()) {
+      const isLoggedIn = this.authService.isLoggedIn();
+      const authToken = this.authService.getAuthToken();
+      const localStorageToken = localStorage.getItem('authToken');
+      
+      console.log('[LoginComponent] Login check results:');
+      console.log('[LoginComponent] - isLoggedIn():', isLoggedIn);
+      console.log('[LoginComponent] - getAuthToken():', authToken);
+      console.log('[LoginComponent] - localStorage token:', localStorageToken);
+      
+      if (isLoggedIn) {
         console.log('[LoginComponent] User is already logged in, redirecting to home...');
         this.router.navigate(['/home'], { replaceUrl: true });
         this.headerService.showHeaderAndSidenav = true;
@@ -62,6 +83,7 @@ export class LoginComponent implements OnInit {
       }
       
       console.log('[LoginComponent] User is not logged in, showing login page');
+      console.log('[LoginComponent] ====== LOGIN COMPONENT INIT COMPLETE ======');
     }
 
   // Handle SSO redirect callback (fallback - main handling is in app.component.ts)
