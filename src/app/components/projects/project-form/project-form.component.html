@@ -9,7 +9,7 @@
           <mat-error *ngIf="projectForm.get('projectName')?.hasError('required')">Name is required</mat-error>
         </mat-form-field>
     
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
           <mat-label>Project Tag</mat-label>
           <input matInput formControlName="projectTag" required />
           <mat-error *ngIf="projectForm.get('projectTag')?.hasError('required')">Tag is required</mat-error>
@@ -22,23 +22,23 @@
         </mat-form-field>
     
         <!-- Developer Dropdown -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
           <mat-label>Developer</mat-label>
-          <mat-select formControlName="developerId" [disabled]="isEditMode || (data?.developerId && !isEditMode)">
+          <mat-select formControlName="developerId" [disabled]="data?.developerId && !isEditMode">
             <mat-option *ngFor="let developer of developers" [value]="developer._id">
               {{ developer.developerName }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="projectForm.get('developerId')?.hasError('required')">Developer is required</mat-error>
-          <mat-hint *ngIf="isEditMode || (data?.developerId && !isEditMode)">
-            {{ isEditMode ? 'Developer cannot be changed in edit mode' : 'Developer is pre-selected' }}
+          <mat-hint *ngIf="data?.developerId && !isEditMode">
+            Developer is pre-selected
           </mat-hint>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
           <mat-label>Index</mat-label>
           <input matInput formControlName="index" type="number" required />
-          <mat-error *ngIf="projectForm.get('projectTag')?.hasError('required')">Index is required</mat-error>
+          <mat-error *ngIf="projectForm.get('index')?.hasError('required')">Index is required</mat-error>
         </mat-form-field>
   
         <mat-checkbox formControlName="isActive">Is Active</mat-checkbox>

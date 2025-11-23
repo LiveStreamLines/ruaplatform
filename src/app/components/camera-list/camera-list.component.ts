@@ -102,29 +102,50 @@ export class CameraListComponent implements OnInit {
     this.cameraService.getCamerasByProject(this.projectId).subscribe({
       next: (data) => {
         this.cameras = data;  // Assign the cameras to the component
-          this.cameras.forEach(camera => {
-              // For each camera, fetch the first and last pictures
-            // this.cameraDetailService.getCameraDetails(this.projectId, camera.camera)
-            this.cameraDetailService.getCameraDetails(this.developerTag, this.projectTag,camera.camera) 
-            .subscribe(
-              {
-                  next: (cameraDetail) => {
-                    this.loading = false;  // Stop loading once the data is fetched
-                    if (!cameraDetail.error) {
-                      camera.firstPhoto =  cameraDetail.firstPhoto;
-                      camera.lastPhoto = cameraDetail.lastPhoto;     
-                      //camera.path = cameraDetail.path;   
-                      camera.path = `${environment.backend}/media/upload/${this.developerTag}/${this.projectTag}/${camera.camera}/`
-                      camera.error = false;
-                    } else {
-                      camera.error = true;
-                    }
-                  },
-                  error: (err) => {                    
-                    console.log ("error");
+        let loadedCount = 0;
+        const totalCameras = this.cameras.length;
+        
+        if (totalCameras === 0) {
+          this.loading = false;
+          return;
+        }
+        
+        this.cameras.forEach(camera => {
+          // Get the camera's main project info (not route params which could be additional project)
+          this.developerService.getDeveloperById(camera.developer).subscribe(developer => {
+            this.projectService.getProjectById(camera.project).subscribe(project => {
+              const mainDeveloperTag = developer.developerTag;
+              const mainProjectTag = project.projectTag;
+              
+              // Use main project info for image paths
+              this.cameraDetailService.getCameraDetails(mainDeveloperTag, mainProjectTag, camera.camera) 
+              .subscribe({
+                next: (cameraDetail) => {
+                  loadedCount++;
+                  if (!cameraDetail.error) {
+                    camera.firstPhoto = cameraDetail.firstPhoto;
+                    camera.lastPhoto = cameraDetail.lastPhoto;     
+                    camera.path = `${environment.backend}/media/upload/${mainDeveloperTag}/${mainProjectTag}/${camera.camera}/`
+                    camera.error = false;
+                  } else {
+                    camera.error = true;
                   }
+                  
+                  if (loadedCount === totalCameras) {
+                    this.loading = false;
+                  }
+                },
+                error: (err) => {
+                  loadedCount++;
+                  camera.error = true;
+                  if (loadedCount === totalCameras) {
+                    this.loading = false;
+                  }
+                }
               });
             });
+          });
+        });
        },
          error: (err) => {
         console.error('Error fetching cameras:', err);

@@ -76,20 +76,31 @@ export class CameraViewComponent implements OnInit{
   }
 
   loadCameraImages(cameraId: string): void {
-    //console.log('Number of cameras:', this.cameras.length);
-    //console.log(this.cameras);
-    this.cameraDetailService.getCameraPreview(this.developerTag, this.projectTag, cameraId).subscribe({
-      next: (response) => {
-        //this.path = response.path;
-        this.path = `${environment.backend}/media/upload/${this.developerTag}/${this.projectTag}/${cameraId}/`
+    // Find the camera object to get its main project info
+    const camera = this.cameras.find(cam => cam.camera === cameraId);
+    if (!camera) {
+      console.error('Camera not found');
+      return;
+    }
+    
+    // Get the camera's main project info (not the route params which could be additional project)
+    this.developerService.getDeveloperById(camera.developer).subscribe(developer => {
+      this.projectService.getProjectById(camera.project).subscribe(project => {
+        const mainDeveloperTag = developer.developerTag;
+        const mainProjectTag = project.projectTag;
         
-        this.images = response.weeklyImages || []; // Update the list of images for the selected camera
-        this.preloadImages();
-        //this.startSliderMovement();
-      },
-      error: (err) => {
-        console.error('Error fetching camera images:', err);
-      },
+        this.cameraDetailService.getCameraPreview(mainDeveloperTag, mainProjectTag, cameraId).subscribe({
+          next: (response) => {
+            this.path = `${environment.backend}/media/upload/${mainDeveloperTag}/${mainProjectTag}/${cameraId}/`
+            
+            this.images = response.weeklyImages || []; // Update the list of images for the selected camera
+            this.preloadImages();
+          },
+          error: (err) => {
+            console.error('Error fetching camera images:', err);
+          },
+        });
+      });
     });
   }
 
@@ -174,19 +185,34 @@ export class CameraViewComponent implements OnInit{
 
   loadCameraVideo(cameraId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.cameraDetailService.getVideoPreview(this.developerTag, this.projectTag, cameraId).subscribe({
-        next: () => {
-          const videoUrl = `${environment.backend}/media/upload/${this.developerTag}/${this.projectTag}/${cameraId}/weekly_video.mp4`;
-          if (videoUrl) {
-            window.open(videoUrl, '_blank'); // Open the video in a new tab
-            resolve(); // Indicate success
-          } else {
-            reject('Video URL not found in response');
-          }
-        },
-        error: (err) => {
-          reject(err);
-        },
+      // Find the camera object to get its main project info
+      const camera = this.cameras.find(cam => cam.camera === cameraId);
+      if (!camera) {
+        reject('Camera not found');
+        return;
+      }
+      
+      // Get the camera's main project info
+      this.developerService.getDeveloperById(camera.developer).subscribe(developer => {
+        this.projectService.getProjectById(camera.project).subscribe(project => {
+          const mainDeveloperTag = developer.developerTag;
+          const mainProjectTag = project.projectTag;
+          
+          this.cameraDetailService.getVideoPreview(mainDeveloperTag, mainProjectTag, cameraId).subscribe({
+            next: () => {
+              const videoUrl = `${environment.backend}/media/upload/${mainDeveloperTag}/${mainProjectTag}/${cameraId}/weekly_video.mp4`;
+              if (videoUrl) {
+                window.open(videoUrl, '_blank'); // Open the video in a new tab
+                resolve(); // Indicate success
+              } else {
+                reject('Video URL not found in response');
+              }
+            },
+            error: (err) => {
+              reject(err);
+            },
+          });
+        });
       });
     });
   }

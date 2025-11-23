@@ -42,11 +42,16 @@ export class ProjectListComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-     // Get the developer ID from the route parameters
+    // Get user role and accessible projects FIRST, before fetching projects
+    this.userRole = this.authService.getUserRole();
+    this.accessibleProjects = this.authService.getAccessibleProjects();
+    console.log('Current user role in project-list:', this.userRole);
+    console.log('Accessible projects:', this.accessibleProjects);
+    
+    // Get the developer ID from the route parameters
     this.developerTag = this.route.snapshot.paramMap.get('developerTag')!;
     this.developerService.getDeveloperIdByTag(this.developerTag).subscribe({
       next: (developer: Developer[]) => {
-        //console.log(developer);
         this.developerId = developer[0]._id;
         this.developerName = developer[0].developerName;
         console.log(this.developerName);
@@ -57,12 +62,20 @@ export class ProjectListComponent implements OnInit {
               ...project,
               logo: project.logo ? this.logopath + "/" + project.logo : this.logopath + "/logos/project/image.png"
             })).sort((a, b) => a.projectName.localeCompare(b.projectName));    
-             // Filter projects based on role and accessible projects
-             this.filteredProjects = this.userRole === 'Super Admin' || this.accessibleProjects[0] === 'all'
-             ? this.projects // Admins see all projects
-             : this.projects.filter((project) =>
-                 this.accessibleProjects.includes(project._id)
-             );
+            
+            // Filter projects based on role and accessible projects
+            if (this.userRole === 'Super Admin' || (this.accessibleProjects && this.accessibleProjects.includes('all'))) {
+              // Super Admin or user with 'all' access sees all projects
+              this.filteredProjects = this.projects;
+            } else {
+              // Regular users only see projects in their accessible list
+              this.filteredProjects = this.projects.filter((project) =>
+                this.accessibleProjects && this.accessibleProjects.includes(project._id)
+              );
+            }
+            
+            console.log('Total projects:', this.projects.length);
+            console.log('Filtered projects:', this.filteredProjects.length);
             this.loading = false;
           },
           error: (err: any) => {
@@ -74,21 +87,16 @@ export class ProjectListComponent implements OnInit {
               { label: 'Home ', url: '/home' },
               { label: ` ${this.developerName}` },
             ]);
-             // Get user role and accessible projects
-             console.log('Project under Developer ' + this.developerTag  + ' loading complete.');
+            console.log('Project under Developer ' + this.developerTag  + ' loading complete.');
           }
         });
 
       },
       error: (err: any) => {
         console.error(err);
+        this.loading = false;
       } 
     });
-
-    this.userRole = this.authService.getUserRole();
-    console.log('Current user role in project-list:', this.userRole); // Debug log to see actual role value
-    this.accessibleProjects = this.authService.getAccessibleProjects();    
-
   }
 
    // This method is called when a project is clicked

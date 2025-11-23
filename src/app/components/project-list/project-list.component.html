@@ -5,7 +5,7 @@
       <p>Loading developers...</p>
     </div>
 
-    <div *ngIf="!loading && projects.length > 0" class="projects-container">
+    <div *ngIf="!loading && filteredProjects.length > 0" class="projects-container">
       <mat-card class="project-card" 
       [ngClass]="{ 'blocked': project.blocked && userRole !== 'Super Admin' && userRole !== 'Admin' }"
       (click)="!project.blocked || userRole === 'Super Admin' || userRole === 'Admin' ? onProjectClick(project) : null"
@@ -33,7 +33,7 @@
       </mat-card>
     </div>
 
-    <div *ngIf="!loading && projects.length === 0">
+    <div *ngIf="!loading && filteredProjects.length === 0">
       <p>No projects found for this developer.</p>
     </div>
   </div>

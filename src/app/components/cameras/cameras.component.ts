@@ -226,10 +226,6 @@ export class CameraComponent implements OnInit, AfterViewChecked {
     this.router.navigate(['/camera-form', cameraId]);
   }
 
-  openAddCamera(){
-    this.router.navigate(['/camera-form',{ developerId: this.selectedDeveloperId, projectId: this.selectedProjectId }]);
-  }
-
   toggleBlockStatus(camera: Camera): void {
     // Initialize blocked as false if undefined
     if (camera.blocked === undefined) {

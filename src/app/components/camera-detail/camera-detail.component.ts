@@ -12,6 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core'; // For date functi
 import { DeveloperService } from '../../services/developer.service';
 import { ProjectService } from '../../services/project.service';
 import { CameraDetailService } from '../../services/camera-detail.service';
+import { CameraService } from '../../services/camera.service';
 import { WeatherService } from '../../services/weather.service';
 import { CameraDetail } from '../../models/camera-detail.model';
 import { MainCompareComponent } from '../main-compare/main-compare.component';
@@ -52,8 +53,10 @@ import { environment } from '../../../environment/environments';
 export class CameraDetailComponent implements OnInit {
   projectId!: any;
   developerId!: any;  
-  projectTag!: string;
-  developerTag!: string;
+  projectTag!: string;  // Main project tag (for image paths)
+  developerTag!: string;  // Main developer tag (for image paths)
+  viewingProjectTag!: string;  // Project tag from route (for navigation)
+  viewingDeveloperTag!: string;  // Developer tag from route (for navigation)
   projectName!: string;
   developerName!: string;
   cameraName!: string;
@@ -88,46 +91,86 @@ export class CameraDetailComponent implements OnInit {
     private router: Router,
     private developerService: DeveloperService,
     private projectService: ProjectService,
+    private cameraService: CameraService,
     private cameraDetailService: CameraDetailService,
     private weatherService: WeatherService,
     private breadcrumbService: BreadcrumbService,
   ) {}
 
   ngOnInit(): void {
-
-
     this.cameraName = this.route.snapshot.params['cameraName'];
-    this.developerTag = this.route.snapshot.paramMap.get('developerTag')!;
-    this.projectTag = this.route.snapshot.paramMap.get('projectTag')!;
+    // Store route params for navigation (could be additional project)
+    this.viewingDeveloperTag = this.route.snapshot.paramMap.get('developerTag')!;
+    this.viewingProjectTag = this.route.snapshot.paramMap.get('projectTag')!;
     
-      // Get Developer ID by developerTag
-      this.developerService.getDeveloperIdByTag(this.developerTag).subscribe({
-        next: (developer: Developer[]) => {
-          this.developerId = developer[0]._id;
-          this.developerName = developer[0].developerName;
-           // Once we have the developerId, get the project ID
-           this.projectService.getProjectIdByTag(this.projectTag).subscribe({
-            next: (project: Project[]) => {
-              this.projectId = project[0]._id;
-              this.projectName = project[0].projectName;
-              this.getCameraDetails(); // Now that we have the projectId, fetch the cameras
-              this.breadcrumbService.setBreadcrumbs([
-                { label: 'Home ', url: '/home' },
-                { label: `${this.developerName}`, url: `home/${this.developerTag}` },
-                { label: `${this.projectName}`, url: `home/${this.developerTag}/${this.projectTag}` },
-                { label: `Timelapse`, url: `home/${this.developerTag}/${this.projectTag}/timelapse` },
-                { label: `${this.cameraName}`}
-              ]);
-            },
-            error: (err: any) => {
-              console.log(err);
-            }
-           });         
-        },
-        error: (err: any) => {
-          console.log(err);
+    // First, get all cameras to find the camera object and its main project info
+    this.cameraService.getAllCameras().subscribe({
+      next: (cameras) => {
+        // Find the camera by camera name
+        const camera = cameras.find(cam => cam.camera === this.cameraName);
+        if (!camera) {
+          console.error('Camera not found');
+          return;
         }
-      });
+        
+        // Get the camera's main developer and project info (for image paths)
+        this.developerService.getDeveloperById(camera.developer).subscribe({
+          next: (developer: Developer) => {
+            this.developerId = developer._id;
+            this.developerName = developer.developerName;
+            const mainDeveloperTag = developer.developerTag;
+            
+            this.projectService.getProjectById(camera.project).subscribe({
+              next: (project: Project) => {
+                this.projectId = project._id;
+                this.projectName = project.projectName;
+                const mainProjectTag = project.projectTag;
+                
+                // Store main project tags for image paths (always use main project for images)
+                this.developerTag = mainDeveloperTag;
+                this.projectTag = mainProjectTag;
+                
+                this.getCameraDetails(); // Now fetch the camera details with main project info
+                
+                // For breadcrumbs, use the viewing project info (where user came from)
+                this.developerService.getDeveloperIdByTag(this.viewingDeveloperTag).subscribe({
+                  next: (viewingDeveloper: Developer[]) => {
+                    const viewingDeveloperName = viewingDeveloper[0].developerName;
+                    this.projectService.getProjectIdByTag(this.viewingProjectTag).subscribe({
+                      next: (viewingProject: Project[]) => {
+                        const viewingProjectName = viewingProject[0].projectName;
+                        this.breadcrumbService.setBreadcrumbs([
+                          { label: 'Home ', url: '/home' },
+                          { label: `${viewingDeveloperName}`, url: `home/${this.viewingDeveloperTag}` },
+                          { label: `${viewingProjectName}`, url: `home/${this.viewingDeveloperTag}/${this.viewingProjectTag}` },
+                          { label: `Timelapse`, url: `home/${this.viewingDeveloperTag}/${this.viewingProjectTag}/timelapse` },
+                          { label: `${this.cameraName}`}
+                        ]);
+                      },
+                      error: (err: any) => {
+                        console.log('Error fetching viewing project:', err);
+                      }
+                    });
+                  },
+                  error: (err: any) => {
+                    console.log('Error fetching viewing developer:', err);
+                  }
+                });
+              },
+              error: (err: any) => {
+                console.log('Error fetching project:', err);
+              }
+            });
+          },
+          error: (err: any) => {
+            console.log('Error fetching developer:', err);
+          }
+        });
+      },
+      error: (err: any) => {
+        console.error('Error fetching cameras:', err);
+      }
+    });
   }
 
   getCameraDetails(date1: string = '', date2: string = ''): void {
@@ -304,7 +347,8 @@ export class CameraDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate([`home/${this.developerTag}/${this.projectTag}/timelapse`]);
+    // Navigate back to the project the user was viewing (route params), not necessarily the main project
+    this.router.navigate([`home/${this.viewingDeveloperTag}/${this.viewingProjectTag}/timelapse`]);
   }
 
   openShareModal(photoUrl: string) {

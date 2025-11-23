@@ -144,13 +144,17 @@ export class UsersComponent implements OnInit, AfterViewInit {
     if (this.selectedDeveloperId && this.selectedDeveloperId !== 'ALL') {
       this.isLoading = true;
       this.projectService.getProjectsByDeveloper(this.selectedDeveloperId).subscribe((projects) => {
-        if (this.isSuperAdmin || this.accessibleProject[0] === 'all') {
+        if (this.isSuperAdmin || (this.accessibleProject && this.accessibleProject.includes('all'))) {
           this.projects = [{ _id: 'ALL', projectName: 'All Projects' }, ...projects];
          } else {
-          // Non-super admins see only their accessible developers
+          // Non-super admins see only their accessible projects
          this.projects = projects.filter((project) =>
-            this.accessibleProject.includes(project._id)
+            this.accessibleProject && this.accessibleProject.includes(project._id)
           );
+          // Add "All Projects" option if there are accessible projects
+          if (this.projects.length > 0) {
+            this.projects = [{ _id: 'ALL', projectName: 'All Projects' }, ...this.projects];
+          }
         }
         this.isLoading = false;
         this.selectedProjectId = this.projects.length ? this.projects[0]._id : null;
