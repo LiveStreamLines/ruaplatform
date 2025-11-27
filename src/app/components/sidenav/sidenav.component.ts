@@ -75,4 +75,8 @@ export class SidenavComponent implements OnInit {
     });
   }
 
+  openTVMonitor() {
+    window.open('https://time-lapse.ruaalmadinah.com/viewer/', '_blank');
+  }
+
 }

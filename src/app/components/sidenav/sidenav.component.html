@@ -20,7 +20,12 @@
     
     <a mat-list-item routerLink="/monitor" routerLinkActive="active" class="nav-item">
       <mat-icon>monitor</mat-icon>
-      <span>Monitor</span>
+      <span>PC Monitor</span>
+    </a>
+    
+    <a mat-list-item (click)="openTVMonitor()" class="nav-item" style="cursor: pointer;">
+      <mat-icon>tv</mat-icon>
+      <span>TV Monitor</span>
     </a>
     
     <a *ngIf="isSuper$ | async" mat-list-item routerLink="/users" routerLinkActive="active" class="nav-item">
