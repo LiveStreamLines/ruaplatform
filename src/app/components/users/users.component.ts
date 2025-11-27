@@ -67,7 +67,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
   currentSortColumn: string = 'name';
   currentSortDirection: 'asc' | 'desc' = 'asc';
 
-  displayedColumns: string[] = ['name', 'email', 'role', 'status', 'lastLogin', 'createdDate', 'actions'];
+  displayedColumns: string[] = ['name', 'email', 'role', 'lastLogin', 'createdDate', 'actions'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -230,13 +230,6 @@ export class UsersComponent implements OnInit, AfterViewInit {
             return this.compare(a.email?.toLowerCase() || '', b.email?.toLowerCase() || '', isAsc);
           case 'role':
             return this.compare(a.role?.toLowerCase() || '', b.role?.toLowerCase() || '', isAsc);
-          case 'status':
-            // Handle the case where status might not exist on User type
-            return this.compare(
-              (a as any).status?.toLowerCase() || '', 
-              (b as any).status?.toLowerCase() || '', 
-              isAsc
-            );
           case 'lastLogin':
             const lastLoginA = a.LastLoginTime ? new Date(a.LastLoginTime).getTime() : 0;
             const lastLoginB = b.LastLoginTime ? new Date(b.LastLoginTime).getTime() : 0;
@@ -335,15 +328,5 @@ export class UsersComponent implements OnInit, AfterViewInit {
     if (!dateString) return 'Never';
     const date = new Date(dateString);
     return date.toLocaleString(); // You can customize the format
-  }
-
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'New': return 'status-new';
-      case 'Reset Password Sent': return 'status-reset';
-      case 'Phone Required': return 'status-phone';
-      case 'active': return 'status-active';
-      default: return '';
-    }
   }
 }

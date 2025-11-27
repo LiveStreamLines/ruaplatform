@@ -9,6 +9,7 @@ export interface User {
     accessibleProjects: string[]; // Array of project IDs
     accessibleCameras: string[]; // Array of camera IDs
     accessibleServices: string[]; // Array of service names
+    accessibleMemories?: string[]; // Array of memory IDs (always 'all')
     canAddUser?: boolean; // Permission to add users
     canGenerateVideoAndPics?: boolean; // Permission to generate video and pictures
     addedUserId?: string; // ID of user who added this user

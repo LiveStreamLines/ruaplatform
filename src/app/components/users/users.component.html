@@ -96,23 +96,6 @@
           <td mat-cell *matCellDef="let user"> {{ user.role }} </td>
         </ng-container>
   
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>
-            <div class="header-cell-container" (click)="sortData({active: 'status', direction: currentSortColumn === 'status' ? (currentSortDirection === 'asc' ? 'desc' : 'asc') : 'asc'})">
-              Status
-              <mat-icon *ngIf="currentSortColumn === 'status'">
-                {{ currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
-              </mat-icon>
-            </div>
-          </th>
-          <td mat-cell *matCellDef="let user">
-            <span [ngClass]="getStatusClass(user.status)">
-              {{ user.status }}
-            </span>
-          </td>
-        </ng-container>
-  
         <!-- Last Login Column -->
         <ng-container matColumnDef="lastLogin">
           <th mat-header-cell *matHeaderCellDef>

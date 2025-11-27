@@ -25,7 +25,6 @@ export class UserFormComponent implements OnInit {
   userForm!: FormGroup;
   isEditing: boolean = false;
   submitted: boolean = false;
-  resetEmail: string = '';
   userId: string | null = null; // Store user ID when editing
   hidepermissions: boolean = false;
   isAllDevSelected: boolean = false;
@@ -110,12 +109,13 @@ export class UserFormComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         phone: [{ value: '', disabled: true}],
         role: [{value: 'User', disabled: true}, Validators.required],
-        accessibleDevelopers: [[]],
+        accessibleDevelopers: [['all']], // Always set to 'all', hidden from UI
         accessibleProjects: [[]],
         accessibleCameras: [[]],
-        accessibleServices: [['all']], // Default to "All" services
-        canAddUser: [false],        // Permission to add user - default to false
-        canGenerateVideoAndPics: [true]    // Permission to upload video
+        accessibleServices: [['all']], // Always set to 'all', hidden from UI
+        accessibleMemories: [['all']], // Always set to 'all', hidden from UI
+        canAddUser: [false],        // Always false, removed from UI
+        canGenerateVideoAndPics: [true]    // Always true, removed from UI
       }
     );
     if (this.isEditing) {
@@ -133,11 +133,9 @@ export class UserFormComponent implements OnInit {
           this.developers = developers.filter(dev => this.accessibleDeveloper.includes(dev._id));
         }
         
-        // Set first developer as default if not editing and not super admin
-        if (!this.isEditing && !this.isSuperAdmin && this.developers.length > 0) {
-          this.userForm.get('accessibleDevelopers')?.setValue([this.developers[0]._id]);
-          this.loadProjectsByDevelopers([this.developers[0]._id]);
-        }
+        // Always set accessibleDevelopers to 'all' and load all projects
+        this.userForm.get('accessibleDevelopers')?.setValue(['all']);
+        this.loadProjectsByDevelopers(['all']);
       },
       error: (error) => console.error('Error fetching developers:', error),
     });
@@ -147,9 +145,18 @@ export class UserFormComponent implements OnInit {
 
   loadProjectsByDevelopers(developerIds: string[]): void {
     if (developerIds.includes('all')) {
-      // Automatically set "all" Project
-      this.userForm.get('accessibleProject')?.setValue(['all']);
-      this.projects = []; // Disable camera selection
+      // Load all projects so users can select individual projects or "All"
+      this.projects = []; // Clear current projects first
+      this.projectService.getAllProjects().subscribe({
+        next: (projects) => {
+          if (this.accessibleProject[0] !== 'all' && !this.isSuperAdmin) {
+            this.projects = projects.filter(project => this.accessibleProject.includes(project._id));
+          } else {
+            this.projects = projects;
+          }
+        },
+        error: (error) => console.error('Error fetching all projects:', error),
+      });
       return;
     }
 
@@ -207,7 +214,9 @@ export class UserFormComponent implements OnInit {
     if (this.userId) {
       this.userService.getUserById(this.userId).subscribe((user) => {
         console.log(user);
-        this.loadProjectsByDevelopers(user.accessibleDevelopers);
+        // Always set accessibleDevelopers to 'all' regardless of existing value
+        this.userForm.get('accessibleDevelopers')?.setValue(['all']);
+        this.loadProjectsByDevelopers(['all']);
         
         // For editing, preserve the email even if user is not super admin
         if (!this.isSuperAdmin) {
@@ -219,12 +228,15 @@ export class UserFormComponent implements OnInit {
           this.userForm.patchValue(user);
         }
         
-        // Ensure accessible services defaults to "All" if not set
-        if (!user.accessibleServices || user.accessibleServices.length === 0) {
-          this.userForm.get('accessibleServices')?.setValue(['all']);
-        }
+        // Always set accessible services to "All"
+        this.userForm.get('accessibleServices')?.setValue(['all']);
         
-        this.resetEmail = user.email;
+        // Always set accessible memories to "All" (if field exists in user data, otherwise set it)
+        this.userForm.get('accessibleMemories')?.setValue(['all']);
+        
+        // Always set canAddUser to false and canGenerateVideoAndPics to true
+        this.userForm.get('canAddUser')?.setValue(false);
+        this.userForm.get('canGenerateVideoAndPics')?.setValue(true);
       });
     }
   }
@@ -233,12 +245,15 @@ export class UserFormComponent implements OnInit {
   onSelectionChange(field: string, event: any): void {
     const selectedValues = event.value;
 
+    // accessibleDevelopers is always 'all' and hidden, so this handler is not needed
+    // but kept for backward compatibility
     if (field === 'accessibleDevelopers') {
+      // Always set to 'all' regardless of selection
+      this.userForm.get('accessibleDevelopers')?.setValue(['all']);
+      
       if (selectedValues.includes('all')) {
         // When "All" is selected
         this.isAllDevSelected = true;
-        this.userForm.get('accessibleDevelopers')?.setValue(['all']);
-
         // Automatically set "all" for projects and cameras
         this.userForm.get('accessibleProjects')?.setValue(['all']);
         this.userForm.get('accessibleCameras')?.setValue(['all']);
@@ -247,8 +262,6 @@ export class UserFormComponent implements OnInit {
       } else {
         // When "All" is deselected
         this.isAllDevSelected = false;
-        this.userForm.get('accessibleDevelopers')?.setValue(selectedValues);
-
         // Reload projects and cameras based on the current developer selection
         this.loadProjectsByDevelopers(selectedValues);
         this.loadCamerasByProjects([]);
@@ -286,15 +299,9 @@ export class UserFormComponent implements OnInit {
     }
 
     if (field === 'accessibleServices') {
-      if (selectedValues.includes('all')) {
-        // When "All" is selected
-        this.isAllServiceSelected = true;
-        this.userForm.get('accessibleServices')?.setValue(['all']);
-      } else {
-        // When "All" is deselected
-        this.isAllServiceSelected = false;
-        this.userForm.get('accessibleServices')?.setValue(selectedValues);
-      }
+      // Always set to 'all' regardless of selection (field is hidden)
+      this.userForm.get('accessibleServices')?.setValue(['all']);
+      this.isAllServiceSelected = true;
     }
   }
 
@@ -311,14 +318,24 @@ export class UserFormComponent implements OnInit {
     const addingUserId = this.authService.getUserId();
     const addingUserName = this.authService.getUsername();
 
-    userData = {...userData, addedUserId: `${addingUserId}`, addedUserName: `${addingUserName}`, status: "New"};
+    // Always set these values regardless of form state
+    userData = {
+      ...userData, 
+      accessibleDevelopers: ['all'],
+      accessibleServices: ['all'],
+      accessibleMemories: ['all'],
+      canAddUser: false,
+      canGenerateVideoAndPics: true,
+      addedUserId: `${addingUserId}`, 
+      addedUserName: `${addingUserName}`, 
+      status: "New"
+    };
 
     if (this.isEditing) {
       this.userService
         .updateUser(this.userId!, userData)
         .subscribe(() => {
           this.submitted = true;
-          this.resetEmail = userData.email;
           console.log('User updated successfully');
         });
     } else {
@@ -326,7 +343,6 @@ export class UserFormComponent implements OnInit {
         next: (response: any) => {
           this.submitted = true;
           this.userId = response._id; // Assuming the backend returns `user_id` in the response
-          this.resetEmail = userData.email;
           console.log('User added successfully');
         },
         error: (err) => {
@@ -343,33 +359,21 @@ export class UserFormComponent implements OnInit {
 
   clearAccessibles(): void {
     // Clear accessible fields and their dependent dropdowns
-    this.userForm.get('accessibleDevelopers')?.setValue([]);
+    // Note: accessibleDevelopers, accessibleServices, and accessibleMemories always remain ['all']
+    this.userForm.get('accessibleDevelopers')?.setValue(['all']); // Always 'all'
     this.userForm.get('accessibleProjects')?.setValue([]);
     this.userForm.get('accessibleCameras')?.setValue([]);
-    this.userForm.get('accessibleServices')?.setValue(['all']); // Keep "All" as default
+    this.userForm.get('accessibleServices')?.setValue(['all']); // Always 'all'
+    this.userForm.get('accessibleMemories')?.setValue(['all']); // Always 'all'
   }
 
   clearPermissions(): void {
+    // Always set these values
     this.userForm.get('canAddUser')?.setValue(false);
-    this.userForm.get('canGenerateVideoAndPics')?.setValue(false);
+    this.userForm.get('canGenerateVideoAndPics')?.setValue(true);
   }
 
-  sendResetPasswordLink(): void {
-    if (!this.resetEmail || !this.userId) {
-      alert('Missing user ID or email address.');
-      return;
-    }
-
-    this.userService.sendResetPasswordLink(this.userId, this.resetEmail).subscribe({
-      next: () => { 
-        alert('Reset password link sent successfully.');
-        this.router.navigate(['/users']);
-      },
-      error: () => alert('Failed to send reset password link.'),
-    });
-  }
-
-  useCurrentPassword(): void {
+  goBack(): void {
     this.router.navigate(['/users']);
   }
 
