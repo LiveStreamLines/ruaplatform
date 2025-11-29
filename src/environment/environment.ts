@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  backend: 'https://time-lapse.ruaalmadinah.com/backend',
+  backend: 'https://timelapse.ruaalmadinah.com/backend',
   proxy: 'http://10.100.72.10/proxy/',
   hik: 'https://10.100.72.10/backend',
   msalConfig: {
