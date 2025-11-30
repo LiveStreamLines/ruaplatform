@@ -15,7 +15,7 @@
 
         <!-- Welcome Text -->
         <div class="welcome-section">
-          <h1>Welcome to Rua Al Madina Timelapse</h1>
+          <h1>Welcome to Rua Timelapse</h1>
           <p>Your comprehensive timelapse monitoring platform</p>
         </div>
 
@@ -84,7 +84,7 @@
         <!-- Temp Login Form (Bypasses Microsoft SSO) -->
         <div class="temp-login-section" style="background-color: #fff3cd; padding: 15px; border-radius: 4px; border: 1px solid #ffc107; margin-bottom: 20px;">
           <h3 style="color: #856404; margin-bottom: 15px; font-size: 14px; font-weight: 600;">
-            ⚠️ TEMP LOGIN (For Testing Only - Will be removed)
+            ⚠️ Device/screen configuration access
           </h3>
           <form (ngSubmit)="onTempLogin()" #loginForm="ngForm">
             <div class="form-group">
@@ -114,7 +114,7 @@
               [disabled]="!loginForm.form.valid"
               style="width: 100%; padding: 12px; background-color: #ff6b35; color: white; border: none; border-radius: 4px; cursor: pointer;"
             >
-              Temp Login
+              Screen setup login
             </button>
           </form>
           
