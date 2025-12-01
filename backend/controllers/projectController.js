@@ -1,5 +1,6 @@
 const projectData = require('../models/projectData');
 const developerData = require('../models/developerData'); // To validate developer selection
+const cameraData = require('../models/cameraData'); // To handle camera cleanup
 const path = require('path');
 const fs = require('fs');
 const logger = require('../logger');
@@ -123,11 +124,57 @@ function updateProject(req, res) {
 // Controller for deleting a Project
 function deleteProject(req, res) {
     try {
-        const success = projectData.deleteItem(req.params.id);
+        const projectId = req.params.id;
+        
+        // Get the project to check if it's RAM
+        const project = projectData.getItemById(projectId);
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+        
+        // Prevent deletion of RAM project
+        if (project.projectName?.toUpperCase() === 'RAM' || project.projectTag?.toLowerCase() === 'ram') {
+            return res.status(400).json({ message: 'Cannot delete RAM project. This project is protected.' });
+        }
+        
+        // Get all cameras to check associations
+        const allCameras = cameraData.getAllItems();
+        
+        // Check if this project is the main project for any camera
+        const camerasWithMainProject = allCameras.filter(cam => cam.project === projectId);
+        if (camerasWithMainProject.length > 0) {
+            return res.status(400).json({ 
+                message: `Cannot delete project. It is the main project for ${camerasWithMainProject.length} camera(s). Please reassign or delete the cameras first.`,
+                cameraCount: camerasWithMainProject.length
+            });
+        }
+        
+        // Find cameras that have this project in their additionalProjects array
+        const camerasWithAdditionalProject = allCameras.filter(cam => 
+            cam.additionalProjects && Array.isArray(cam.additionalProjects) && cam.additionalProjects.includes(projectId)
+        );
+        
+        // Remove this project from additionalProjects arrays
+        if (camerasWithAdditionalProject.length > 0) {
+            logger.info(`Removing project ${projectId} from ${camerasWithAdditionalProject.length} camera(s) additionalProjects`);
+            camerasWithAdditionalProject.forEach(camera => {
+                const updatedAdditionalProjects = camera.additionalProjects.filter(projId => projId !== projectId);
+                cameraData.updateItem(camera._id, { additionalProjects: updatedAdditionalProjects });
+                logger.info(`Removed project ${projectId} from camera ${camera._id} additionalProjects`);
+            });
+        }
+        
+        // Now delete the project
+        const success = projectData.deleteItem(projectId);
         if (!success) {
             return res.status(404).json({ message: 'Project not found' });
         }
-        res.json({ message: 'Project deleted successfully' });
+        
+        logger.info(`Project ${projectId} (${project.projectName}) deleted successfully. Removed from ${camerasWithAdditionalProject.length} camera(s) additionalProjects.`);
+        res.json({ 
+            message: 'Project deleted successfully',
+            removedFromCameras: camerasWithAdditionalProject.length
+        });
     } catch (error) {
         logger.error('Error deleting project:', error);
         res.status(500).json({ message: error.message });

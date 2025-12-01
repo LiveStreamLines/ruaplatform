@@ -145,6 +145,13 @@ export class ProjectService {
     return this.http.put(`${this.baseUrl}/${projectId}`, data, {headers});
   }
 
+  deleteProject(projectId: string): Observable<any> {
+    const authh = this.authService.getAuthToken(); 
+    const headers = new HttpHeaders({ 
+      'Authorization': authh ? `Bearer ${authh}` : ''  // Send authh header
+    });
+    return this.http.delete(`${this.baseUrl}/${projectId}`, { headers });
+  }
 
   
   // Helper function to find the project ID by tag
